@@ -10,8 +10,8 @@ import JavDataService from "@/services/JavDataService";
 export default {
   data() {
     return {
-      page: Number,
-      actor: Object,
+      page: 1,
+      actor: {},
       query: {}
     };
   },
@@ -31,7 +31,7 @@ export default {
       };
     }
   },
-  mounted() {
+  created() {
     console.log("mounted");
     this.page = this.$route.params["page"]
       ? Number(this.$route.params.page)

@@ -10,13 +10,11 @@ export default {
   props: {
     getData: Function,
     page: Number,
-    query: {
-      type: Object,
-      default: new Object()
-    }
+    query: Object
   },
   data() {
     return {
+      currentPage: 1,
       items: [],
       end: false,
       limit: 50
@@ -27,7 +25,7 @@ export default {
   },
   computed: {
     param() {
-      return { page: this.page, ...this.query };
+      return { page: this.currentPage, ...this.query };
     }
   },
   methods: {
@@ -39,15 +37,13 @@ export default {
             this.end = true;
           }
           this.items.push(...response.data);
-          this.page++;
+          this.currentPage++;
         });
       }
     }
   },
   mounted() {
-    this.page = this.$route.params["page"]
-      ? Number(this.$route.params.page)
-      : 1;
+    this.currentPage = this.page || 1;
     this.loadData();
   }
 };

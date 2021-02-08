@@ -10,7 +10,7 @@ import JavDataService from "@/services/JavDataService";
 export default {
   data() {
     return {
-      page: Number
+      page: 1
     };
   },
   components: {
@@ -24,7 +24,7 @@ export default {
   methods: {
     getData: JavDataService.getNewRelease
   },
-  mounted() {
+  created() {
     this.page = this.$route.params["page"]
       ? Number(this.$route.params.page)
       : 1;
