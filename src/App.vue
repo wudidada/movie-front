@@ -1,32 +1,37 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+    <Nav :buttons="buttons" />
+    <div id="main">
+      <router-view />
     </div>
-    <router-view />
   </div>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
+<script>
+import Nav from "@/components/Nav.vue";
+export default {
+  name: "App",
+  components: { Nav },
+  data: () => ({
+    buttons: [
+      { name: "演员", url: "/actor" },
+      { name: "导演", url: "/director" },
+      { name: "发行商", url: "/label" },
+      { name: "制作商", url: "/maker" },
+      { name: "标签", url: "/tag" },
+      { name: "系列", url: "/series" },
+      { name: "排行榜", url: "/rank" }
+    ]
+  }),
+  metaInfo: {
+    // if no subcomponents specify a metaInfo.title, this title will be used
+    title: "Home Page",
+    // all titles will be injected into this template
+    titleTemplate: "%s - Movie Front"
   }
-}
+};
+</script>
+
+<style>
+@import "assets/reset.css";
 </style>
