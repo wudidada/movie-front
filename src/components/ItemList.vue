@@ -42,7 +42,7 @@ export default {
       }
     }
   },
-  mounted() {
+  created() {
     this.currentPage = this.page || 1;
     this.loadData();
   }

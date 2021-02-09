@@ -33,7 +33,7 @@ export default {
       this.$route.replace("/404");
     }
   },
-  mounted() {
+  created() {
     let cid = this.$route.params.cid;
     this.getData(cid);
   }

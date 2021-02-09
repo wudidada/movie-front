@@ -34,7 +34,7 @@ export default {
     },
     onScroll() {
       //变量scrollTop是滚动条滚动时，距离顶部的距离
-      console.log("scroll");
+      // console.log("scroll");
       let scrollTop = Math.ceil(
         document.documentElement.scrollTop || document.body.scrollTop
       );
@@ -46,7 +46,7 @@ export default {
       let scrollHeight =
         document.documentElement.scrollHeight || document.body.scrollHeight;
       //滚动条到底部的条件
-      console.log(scrollTop, windowHeight, scrollHeight);
+      // console.log(scrollTop, windowHeight, scrollHeight);
       if (scrollTop + windowHeight >= scrollHeight) {
         //到了这个就可以进行业务逻辑加载后台数据了
         this.$emit("scrollReachBottom");

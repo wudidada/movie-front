@@ -1,7 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import NewRlease from "../views/NewRlease.vue";
-import Home from "../views/Home.vue";
 import NotFound from "../views/NotFound.vue";
 import Video from "../views/Video.vue";
 import Actor from "../views/Actor.vue";
@@ -17,7 +16,7 @@ const routes = [
   {
     path: "/",
     name: "Home",
-    component: Home
+    component: NewRlease
   },
   {
     path: "/new_release/:page?",

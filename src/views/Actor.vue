@@ -1,6 +1,11 @@
 <template>
   <div class="actor-items">
-    <ItemList :getData="getData" :query="query" :page="page" />
+    <ItemList
+      :getData="getData"
+      :query="query"
+      :page="page"
+      :incresePage="increasePage"
+    />
   </div>
 </template>
 
@@ -20,7 +25,7 @@ export default {
   },
   metaInfo() {
     return {
-      title: this?.actor?.name
+      title: this.actor.name
     };
   },
   methods: {
@@ -29,6 +34,9 @@ export default {
       this.actor = {
         name: "TEST"
       };
+    },
+    increasePage() {
+      this.page++;
     }
   },
   created() {
@@ -36,7 +44,7 @@ export default {
     this.page = this.$route.params["page"]
       ? Number(this.$route.params.page)
       : 1;
-    this.getActor;
+    this.getActor();
     this.query = { dmm_id: Number(this.$route.params.dmm_id) };
   }
 };
