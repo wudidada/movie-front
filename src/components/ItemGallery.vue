@@ -19,6 +19,16 @@ export default {
   props: {
     items: Array
   },
+  data() {
+    return {
+      isRresh: false
+    };
+  },
+  watch: {
+    items: function() {
+      this.isRresh = false;
+    }
+  },
   methods: {
     getPubDate(item) {
       let date = item.pub_date || item.release_date;
@@ -47,8 +57,9 @@ export default {
         document.documentElement.scrollHeight || document.body.scrollHeight;
       //滚动条到底部的条件
       // console.log(scrollTop, windowHeight, scrollHeight);
-      if (scrollTop + windowHeight >= scrollHeight) {
+      if (!this.isRresh && scrollTop + windowHeight >= scrollHeight) {
         //到了这个就可以进行业务逻辑加载后台数据了
+        this.isRresh = true;
         this.$emit("scrollReachBottom");
         console.log("next page");
       }

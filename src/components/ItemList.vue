@@ -1,6 +1,10 @@
 <template>
   <div class="item-list">
-    <ItemGallery :items="items" @scrollReachBottom="loadData" />
+    <ItemGallery
+      :items="items"
+      @scrollReachBottom="loadData"
+      :onLoad="onLoad"
+    />
   </div>
 </template>
 
@@ -31,6 +35,7 @@ export default {
   methods: {
     loadData() {
       if (!this.end) {
+        this.onLoad = true;
         console.log(this.param);
         this.getData(this.param).then(response => {
           if (response.data.length < this.limit) {
@@ -40,6 +45,9 @@ export default {
           this.currentPage++;
         });
       }
+    },
+    isLoading() {
+      return this.onLoad;
     }
   },
   created() {
