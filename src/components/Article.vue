@@ -5,7 +5,7 @@
     </h2>
     <div class="info flex-container">
       <div id="cover">
-        <img :src="jav.cover" />
+        <img :src="jav.cover | largePic" />
       </div>
       <div id="detail">
         <table class="detail-table">

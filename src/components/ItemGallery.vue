@@ -4,7 +4,7 @@
       <div class="item" v-for="item in items" :key="item.pid">
         <router-link :to="`/v/${item.cid}`" target="_blank" :title="item.title">
           <div class="dvd-id">{{ item.dvd_id }}</div>
-          <img class="cover" :src="getImageUrl(item.cover)" />
+          <img class="cover" :src="item.cover | smallPic" />
           <div class="title">{{ item.title }}</div>
           <div class="date">{{ getPubDate(item) }}</div>
           <div v-if="item.score" class="score">{{ item.score | fScore }}</div>
@@ -33,14 +33,6 @@ export default {
     getPubDate(item) {
       let date = item.pub_date || item.release_date;
       return date;
-    },
-    getImageUrl(url) {
-      if (!url) return url;
-      let i = url.lastIndexOf("pl");
-      if (i > -1) {
-        return url.slice(0, i) + "ps" + url.slice(i + 2);
-      }
-      return url;
     },
     onScroll() {
       //变量scrollTop是滚动条滚动时，距离顶部的距离
