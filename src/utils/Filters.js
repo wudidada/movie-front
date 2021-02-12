@@ -16,9 +16,9 @@ Vue.filter("smallPic", url => {
 
 Vue.filter("largePic", url => {
   if (!url) return url;
-  let i = url.lastIndexOf("ps");
+  let i = url.lastIndexOf("ps.");
   if (i > -1) {
-    return url.slice(0, i) + "pl" + url.slice(i + 2);
+    return url.slice(0, i) + "pl." + url.slice(i + 3);
   }
   return url;
 });
