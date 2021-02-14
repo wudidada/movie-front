@@ -18,7 +18,7 @@ export default {
       { name: "导演", url: "/director" },
       { name: "发行商", url: "/label" },
       { name: "制作商", url: "/maker" },
-      { name: "标签", url: "/tag" },
+      // { name: "标签", url: "/tag" },
       { name: "系列", url: "/series" },
       { name: "排行榜", url: "/rank" }
     ]

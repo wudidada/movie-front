@@ -26,7 +26,7 @@
               <td class="key">导演</td>
               <td class="value">
                 <router-link
-                  :to="`/director/${jav.director.dmm_id}`"
+                  :to="`/director/${jav.director.id}`"
                   target="_blank"
                   >{{ jav.director.name }}</router-link
                 >
@@ -35,21 +35,17 @@
             <tr v-if="jav['maker']">
               <td class="key">制作商</td>
               <td class="value">
-                <router-link
-                  :to="`/maker/${jav.maker.dmm_id}`"
-                  target="_blank"
-                  >{{ jav.maker.name }}</router-link
-                >
+                <router-link :to="`/maker/${jav.maker.id}`" target="_blank">{{
+                  jav.maker.name
+                }}</router-link>
               </td>
             </tr>
             <tr v-if="jav['label']">
               <td class="key">发行商</td>
               <td class="value">
-                <router-link
-                  :to="`/label/${jav.label.dmm_id}`"
-                  target="_blank"
-                  >{{ jav.label.name }}</router-link
-                >
+                <router-link :to="`/label/${jav.label.id}`" target="_blank">{{
+                  jav.label.name
+                }}</router-link>
               </td>
             </tr>
             <tr v-if="jav['series']">
@@ -84,7 +80,7 @@
                 <router-link
                   v-for="actor in jav.actors"
                   :key="actor.dmm_id"
-                  :to="`/actor/${actor.dmm_id}`"
+                  :to="`/actor/${actor.id}`"
                   target="_blank"
                   >{{ actor.name }}</router-link
                 >

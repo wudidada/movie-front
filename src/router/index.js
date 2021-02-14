@@ -9,6 +9,11 @@ import Tag from "../views/Tag.vue";
 import Series from "../views/Series.vue";
 import Maker from "../views/Maker.vue";
 import Director from "../views/Director.vue";
+import ActorList from "../views/ActorList.vue";
+import DirectorList from "../views/DirectorList.vue";
+import MakerList from "../views/MakerList.vue";
+import LabelList from "../views/LabelList.vue";
+import SeriesList from "../views/SeriesList.vue";
 
 Vue.use(VueRouter);
 
@@ -29,22 +34,47 @@ const routes = [
     component: Video
   },
   {
-    path: "/actor/:dmm_id/:page?",
+    path: "/actor",
+    name: "ActorList",
+    component: ActorList
+  },
+  {
+    path: "/director",
+    name: "DirectorList",
+    component: DirectorList
+  },
+  {
+    path: "/label",
+    name: "LabelList",
+    component: LabelList
+  },
+  {
+    path: "/maker",
+    name: "MakerList",
+    component: MakerList
+  },
+  {
+    path: "/series",
+    name: "SeriesList",
+    component: SeriesList
+  },
+  {
+    path: "/actor/:id/:page?",
     name: "Actor",
     component: Actor
   },
   {
-    path: "/director/:dmm_id/:page?",
+    path: "/director/:id/:page?",
     name: "Director",
     component: Director
   },
   {
-    path: "/label/:dmm_id/:page?",
+    path: "/label/:id/:page?",
     name: "Label",
     component: Label
   },
   {
-    path: "/maker/:dmm_id/:page?",
+    path: "/maker/:id/:page?",
     name: "Maker",
     component: Maker
   },

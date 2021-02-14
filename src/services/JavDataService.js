@@ -31,5 +31,25 @@ export default {
 
   getTagJav(params) {
     return http.get("jav/tag", { params });
+  },
+
+  getActors(params) {
+    return http.get("jav/actors", { params });
+  },
+
+  getDirectors(params) {
+    return http.get("jav/directors", { params });
+  },
+
+  getMakers(params) {
+    return http.get("jav/makers", { params });
+  },
+
+  getLabels(param) {
+    return http.get("jav/labels", { param });
+  },
+
+  getSeries(param) {
+    return http.get("jav/serieses", { param });
   }
 };

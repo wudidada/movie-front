@@ -45,9 +45,6 @@ export default {
           this.currentPage++;
         });
       }
-    },
-    isLoading() {
-      return this.onLoad;
     }
   },
   created() {
