@@ -39,4 +39,8 @@ export default {
 #main {
   padding-top: 20px;
 }
+
+body {
+  overflow-y: scroll;
+}
 </style>
