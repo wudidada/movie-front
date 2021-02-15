@@ -14,6 +14,7 @@ import DirectorList from "../views/DirectorList.vue";
 import MakerList from "../views/MakerList.vue";
 import LabelList from "../views/LabelList.vue";
 import SeriesList from "../views/SeriesList.vue";
+import SearchResult from "../views/SearchResult.vue";
 
 Vue.use(VueRouter);
 
@@ -87,6 +88,11 @@ const routes = [
     path: "/tag/:dmm_id/:page?",
     name: "Tag",
     component: Tag
+  },
+  {
+    path: "/search",
+    name: "Search",
+    component: SearchResult
   },
   {
     path: "*",

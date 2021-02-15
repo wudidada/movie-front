@@ -1,10 +1,6 @@
 <template>
   <div class="item-list">
-    <ItemGallery
-      :items="items"
-      @scrollReachBottom="loadData"
-      :onLoad="onLoad"
-    />
+    <ItemGallery :items="items" @scrollReachBottom="loadData" />
   </div>
 </template>
 
@@ -29,13 +25,12 @@ export default {
   },
   computed: {
     param() {
-      return { page: this.currentPage, ...this.query };
+      return { page: this.currentPage, limit: this.limit, ...this.query };
     }
   },
   methods: {
     loadData() {
       if (!this.end) {
-        this.onLoad = true;
         console.log(this.param);
         this.getData(this.param).then(response => {
           if (response.data.length < this.limit) {

@@ -1,9 +1,9 @@
 <template>
   <div class="video-box flex-container">
-    <h2 class="article-title">
-      {{ title }}
-    </h2>
     <div class="info flex-container">
+      <h2 class="article-title">
+        {{ title }}
+      </h2>
       <div id="cover">
         <img :src="jav.cover | largePic" />
       </div>
@@ -107,24 +107,27 @@ export default {
 };
 </script>
 
-<style>
-.video-box {
-  justify-content: center;
-}
-
+<style scoped>
 .article-title {
-  margin: 0 0 1.5rem 0;
+  margin: 0 0 1rem 0;
   width: 100%;
 }
 
 .info {
-  width: 90%;
+  width: 80%;
+}
+
+img {
+  min-width: 800px;
+  min-height: 540px;
 }
 
 #detail {
+  flex-basis: 0;
+  flex-shrink: 1;
   flex-grow: 1;
   width: 30%;
-  border: 3px solid yellow;
+  padding: 0.75rem;
 }
 
 .detail-table > tbody > tr {
@@ -145,5 +148,10 @@ export default {
 
 .value > a {
   padding: 0 1rem 0 0;
+}
+
+#desc {
+  margin: 30px;
+  text-indent: 2em;
 }
 </style>

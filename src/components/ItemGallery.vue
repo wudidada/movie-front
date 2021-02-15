@@ -1,15 +1,20 @@
 <template>
   <div id="outer" class="flex-container">
     <div class="items flex-container">
-      <div class="item" v-for="item in items" :key="item.pid">
-        <router-link :to="`/v/${item.cid}`" target="_blank" :title="item.title">
-          <div class="dvd-id">{{ item.dvd_id }}</div>
-          <img class="cover" :src="item.cover | smallPic" />
-          <div class="title">{{ item.title }}</div>
-          <div class="date">{{ getPubDate(item) }}</div>
-          <div v-if="item.score" class="score">{{ item.score | fScore }}</div>
-        </router-link>
-      </div>
+      <router-link
+        class="item"
+        v-for="item in items"
+        :key="item.pid"
+        :to="`/v/${item.cid}`"
+        target="_blank"
+        :title="item.title"
+      >
+        <div class="id">{{ getID(item) }}</div>
+        <img class="cover" :src="item.cover | smallPic" />
+        <div class="title">{{ item.title }}</div>
+        <div class="date">{{ getPubDate(item) }}</div>
+        <div v-if="item.score" class="score">{{ item.score | fScore }}</div>
+      </router-link>
     </div>
   </div>
 </template>
@@ -33,6 +38,17 @@ export default {
     getPubDate(item) {
       let date = item.pub_date || item.release_date;
       return date;
+    },
+    getID(item) {
+      let id = item.dvd_id;
+      if (item["actors"] && item.actors.length > 0) {
+        id += " ";
+        for (let actor of item.actors) {
+          id += ` ${actor.name}`;
+        }
+      }
+
+      return id;
     },
     onScroll() {
       //变量scrollTop是滚动条滚动时，距离顶部的距离
@@ -66,35 +82,38 @@ export default {
 };
 </script>
 
-<style>
-#outer {
-  justify-content: center;
-}
-
+<style scoped>
 .items {
-  justify-content: center;
-  margin: 10px 0;
-  width: 80%;
+  width: 90%;
 }
 
 .item {
   width: 200px;
-  height: 300px;
-  padding: 8px 6.4px;
+  height: 290px;
+  padding: 0;
+  margin: 0.5rem 0.4rem;
   text-align: center;
+  box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.2), 0 5px 8px 0 rgba(0, 0, 0, 0.14),
+    0 1px 14px 0 rgba(0, 0, 0, 0.12);
+  border-radius: 5px;
 }
 
-.item:hover {
-  background-color: #cccccc;
+.id {
+  height: 1.5rem;
+  line-height: 1.5rem;
+  overflow: hidden;
+  margin: 0 4px;
 }
 
 .title {
   font-size: 0.8rem;
   overflow: hidden;
-  line-height: 1.4em;
-  height: 2.8em;
+  line-height: 1.2rem;
+  margin: 3px 5px;
+  height: 2.4rem;
   /* white-space: nowrap; */
   text-overflow: ellipsis;
+  /* vertical-align: middle; */
 }
 
 .date {

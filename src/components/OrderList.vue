@@ -1,17 +1,18 @@
 <template>
-  <div id="outer" class="flex-container">
+  <div id="outer">
     <div class="items flex-container" @scroll="onScroll">
-      <div class="item" v-for="[key, item] of Object.entries(items)" :key="key">
-        <router-link
-          :to="`/${type}/${item.id}`"
-          target="_blank"
-          :title="item.name"
-        >
-          <div class="rank">{{ key }}</div>
-          <div class="name">{{ item.name }}</div>
-          <div class="count">{{ item.count }}</div>
-        </router-link>
-      </div>
+      <router-link
+        class="item"
+        v-for="[key, item] of Object.entries(items)"
+        :key="key"
+        :to="`/${type}/${item.id}`"
+        target="_blank"
+        :title="item.name"
+      >
+        <div class="rank">{{ key }}</div>
+        <strong class="name">{{ item.name }}</strong>
+        <span class="count">({{ item.count }})</span>
+      </router-link>
     </div>
   </div>
 </template>
@@ -88,3 +89,36 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+#outer {
+  margin: 6rem;
+  margin-top: 0;
+}
+
+.item {
+  box-sizing: border-box;
+  width: 20%;
+  padding: 1rem;
+  margin: 0.5rem 0.4rem;
+  text-align: center;
+  box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.2), 0 5px 8px 0 rgba(0, 0, 0, 0.14),
+    0 1px 14px 0 rgba(0, 0, 0, 0.12);
+  border-radius: 5px;
+}
+
+a:hover {
+  color: #363636;
+}
+
+.rank {
+  color: #363636;
+  font-size: 0.9em;
+  float: left;
+  margin: -5px;
+}
+
+.count {
+  color: #999;
+}
+</style>

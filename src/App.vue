@@ -34,4 +34,8 @@ export default {
 
 <style>
 @import "assets/reset.css";
+
+#main {
+  padding-top: 20px;
+}
 </style>

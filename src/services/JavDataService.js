@@ -45,11 +45,15 @@ export default {
     return http.get("jav/makers", { params });
   },
 
-  getLabels(param) {
-    return http.get("jav/labels", { param });
+  getLabels(params) {
+    return http.get("jav/labels", { params });
   },
 
-  getSeries(param) {
-    return http.get("jav/serieses", { param });
+  getSeries(params) {
+    return http.get("jav/serieses", { params });
+  },
+
+  getSearchResult(params) {
+    return http.get("jav/search", { params });
   }
 };
