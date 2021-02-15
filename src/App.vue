@@ -14,6 +14,7 @@ export default {
   components: { Nav },
   data: () => ({
     buttons: [
+      { name: "最新", url: "/new_release" },
       { name: "演员", url: "/actor" },
       { name: "导演", url: "/director" },
       { name: "发行商", url: "/label" },
