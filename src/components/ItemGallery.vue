@@ -11,7 +11,9 @@
       >
         <div class="id">{{ getID(item) }}</div>
         <img class="cover" :src="item.cover | smallPic" />
-        <div class="title">{{ item.title }}</div>
+        <div class="title">
+          <div>{{ item.title }}</div>
+        </div>
         <div class="date">{{ getPubDate(item) }}</div>
         <div v-if="item.score" class="score">{{ item.score | fScore }}</div>
       </router-link>
@@ -107,13 +109,17 @@ export default {
 
 .title {
   font-size: 0.8rem;
-  overflow: hidden;
-  line-height: 1.2rem;
   margin: 3px 5px;
   height: 2.4rem;
-  /* white-space: nowrap; */
-  text-overflow: ellipsis;
-  /* vertical-align: middle; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.title > div {
+  overflow: hidden;
+  line-height: 1.2rem;
+  max-height: 2.4rem;
 }
 
 .date {
