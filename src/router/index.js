@@ -10,6 +10,7 @@ import Series from "../views/Series.vue";
 import Maker from "../views/Maker.vue";
 import Director from "../views/Director.vue";
 import ActorList from "../views/ActorList.vue";
+import DanyuList from "../views/DanyuList.vue";
 import DirectorList from "../views/DirectorList.vue";
 import MakerList from "../views/MakerList.vue";
 import LabelList from "../views/LabelList.vue";
@@ -38,6 +39,11 @@ const routes = [
     path: "/actor",
     name: "ActorList",
     component: ActorList
+  },
+  {
+    path: "/danyu",
+    name: "DanyuList",
+    component: DanyuList
   },
   {
     path: "/director",

@@ -37,6 +37,10 @@ export default {
     return http.get("jav/actors", { params });
   },
 
+  getDanyus(params) {
+    return http.get("jav/danyus", { params });
+  },
+
   getDirectors(params) {
     return http.get("jav/directors", { params });
   },

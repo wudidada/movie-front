@@ -15,7 +15,14 @@ export default {
   data: () => ({
     buttons: [
       { name: "最新", url: "/new_release" },
-      { name: "演员", url: "/actor" },
+      {
+        name: "演员",
+        url: "/actor",
+        sub: [
+          { name: "女优", url: "/actor" },
+          { name: "男优", url: "/danyu" }
+        ]
+      },
       { name: "导演", url: "/director" },
       { name: "发行商", url: "/label" },
       { name: "制作商", url: "/maker" },

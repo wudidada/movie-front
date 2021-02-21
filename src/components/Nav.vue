@@ -1,10 +1,22 @@
 <template>
   <div id="nav" class="flex-container">
     <ul>
-      <li v-for="button in buttons" :key="button.name" class="nav-button">
+      <li
+        v-for="button in buttons"
+        :key="button.name"
+        :class="{ 'nav-dropdown-container': button['sub'] }"
+      >
         <router-link :to="button.url" class="nav-link">
           {{ button.name }}
         </router-link>
+        <span v-if="button['sub']" class="arrow"></span>
+        <ul v-if="button['sub']" class="nav-dropdown">
+          <li v-for="sub in button.sub" :key="sub.url">
+            <router-link :to="sub.url" class="nav-link">
+              {{ sub.name }}</router-link
+            >
+          </li>
+        </ul>
       </li>
     </ul>
     <form action="/search" target="_blank" class="search-box">
@@ -54,9 +66,10 @@ ul {
   padding: 0;
 }
 
-li {
+#nav ul li {
   display: inline-block;
-  padding: 8px;
+  margin: 0 0.6em;
+  position: relative;
 }
 
 .nav-link {
@@ -67,6 +80,46 @@ li {
 .nav-link:hover,
 .router-link-active {
   border-bottom: 3px solid #42b983;
+}
+
+.nav-dropdown-container {
+  padding-right: 0.8em;
+}
+
+.nav-dropdown-container .nav-link:hover:not(.router-link-active) {
+  border-bottom: none;
+}
+
+.arrow {
+  position: absolute;
+  vertical-align: middle;
+  margin-left: 4px;
+  margin-top: 10px;
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 5px solid #4f5959;
+}
+
+.nav-dropdown {
+  display: none;
+  max-height: calc(100vh - 61px);
+  overflow-y: auto;
+  position: absolute;
+  top: 100%;
+  right: -15px;
+  background-color: #fff;
+  padding: 10px 0;
+  border: 1px solid #ddd;
+  border-bottom-color: #ccc;
+  text-align: left;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.nav-dropdown-container:hover .nav-dropdown {
+  display: block;
 }
 
 .search-box {
