@@ -37,6 +37,9 @@ export default {
             this.end = true;
           }
           this.items.push(...response.data);
+          if (this.currentPage == 1 && response.data.length == 0) {
+            this.$router.replace("/404");
+          }
           this.currentPage++;
         });
       }

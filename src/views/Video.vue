@@ -30,7 +30,7 @@ export default {
         .catch(() => this.redirect());
     },
     redirect() {
-      this.$route.replace("/404");
+      this.$router.replace("/404");
     }
   },
   created() {

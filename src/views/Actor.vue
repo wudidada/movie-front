@@ -40,7 +40,6 @@ export default {
     }
   },
   created() {
-    console.log("mounted");
     this.page = this.$route.params["page"]
       ? Number(this.$route.params.page)
       : 1;
