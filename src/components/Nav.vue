@@ -6,15 +6,17 @@
         :key="button.name"
         :class="{ 'nav-dropdown-container': button['sub'] }"
       >
-        <router-link :to="button.url" class="nav-link">
-          {{ button.name }}
-        </router-link>
+        <router-link
+          :to="button.url"
+          :class="['nav-link', { active: isActive(button) }]"
+          >{{ button.name }}</router-link
+        >
         <span v-if="button['sub']" class="arrow"></span>
         <ul v-if="button['sub']" class="nav-dropdown">
           <li v-for="sub in button.sub" :key="sub.url">
-            <router-link :to="sub.url" class="nav-link">
-              {{ sub.name }}</router-link
-            >
+            <router-link :to="sub.url" class="nav-link">{{
+              sub.name
+            }}</router-link>
           </li>
         </ul>
       </li>
@@ -41,6 +43,21 @@ export default {
   },
   props: {
     buttons: Array
+  },
+  methods: {
+    isActive(button) {
+      if (this.$route.path === button.url) {
+        return true;
+      }
+      if (button["sub"]) {
+        for (let sub of button.sub) {
+          if (this.$route.path === sub.url) {
+            return true;
+          }
+        }
+      }
+      return false;
+    }
   }
 };
 </script>
@@ -59,9 +76,11 @@ export default {
   align-items: center;
 }
 
-ul {
+#nav > ul {
   display: flex;
   list-style-type: none;
+  height: 40px;
+  line-height: 40px;
   margin: 0;
   padding: 0;
 }
@@ -78,7 +97,8 @@ ul {
 }
 
 .nav-link:hover,
-.router-link-active {
+.router-link-active,
+.active {
   border-bottom: 3px solid #42b983;
 }
 
@@ -91,10 +111,11 @@ ul {
 }
 
 .arrow {
-  position: absolute;
+  display: inline-block;
   vertical-align: middle;
-  margin-left: 4px;
-  margin-top: 10px;
+  margin-top: -1px;
+  margin-left: 6px;
+  margin-right: -14px;
   width: 0;
   height: 0;
   border-left: 4px solid transparent;
@@ -105,12 +126,12 @@ ul {
 .nav-dropdown {
   display: none;
   max-height: calc(100vh - 61px);
+  padding: 5px 0;
   overflow-y: auto;
   position: absolute;
   top: 100%;
-  right: -15px;
+  left: 0;
   background-color: #fff;
-  padding: 10px 0;
   border: 1px solid #ddd;
   border-bottom-color: #ccc;
   text-align: left;
@@ -120,6 +141,28 @@ ul {
 
 .nav-dropdown-container:hover .nav-dropdown {
   display: block;
+}
+
+.nav-dropdown a:hover {
+  color: #42b983;
+}
+
+.nav-dropdown .router-link-active {
+  color: #42b983;
+  border-bottom: none;
+}
+
+#nav .nav-dropdown .router-link-active::after {
+  content: "";
+  width: 0;
+  height: 0;
+  border-bottom: 5px solid #42b983;
+  border-left: 3px solid transparent;
+  border-right: 3px solid transparent;
+  position: absolute;
+  bottom: 0;
+  left: calc(50% - 3px);
+  transform: translateY(-50%);
 }
 
 .search-box {

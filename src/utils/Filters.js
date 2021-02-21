@@ -22,3 +22,12 @@ Vue.filter("largePic", url => {
   }
   return url;
 });
+
+Vue.filter("fID", ID => {
+  if (!ID) return ID;
+  let res = ID.match(/[^\s]+\s*[^\s]*/);
+  if (res && res[0].length < ID.length) {
+    return res[0] + "...";
+  }
+  return ID;
+});

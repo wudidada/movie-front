@@ -9,7 +9,7 @@
         target="_blank"
         :title="item.title"
       >
-        <div class="id">{{ getID(item) }}</div>
+        <div class="id" :title="getID(item)">{{ getID(item) | fID }}</div>
         <img class="cover" :src="item.cover | smallPic" />
         <div class="title">
           <div>{{ item.title }}</div>
@@ -105,6 +105,7 @@ export default {
   line-height: 1.5rem;
   overflow: hidden;
   margin: 0 4px;
+  white-space: pre-wrap;
 }
 
 .title {
