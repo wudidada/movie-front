@@ -79,10 +79,22 @@
               <td class="value">
                 <router-link
                   v-for="actor in jav.actors"
-                  :key="actor.dmm_id"
+                  :key="actor.id"
                   :to="`/actor/${actor.id}`"
                   target="_blank"
                   >{{ actor.name }}</router-link
+                >
+              </td>
+            </tr>
+            <tr v-if="jav['danyus'] && jav.danyus.length > 0">
+              <td class="key">男优</td>
+              <td class="value">
+                <router-link
+                  v-for="danyu in jav.danyus"
+                  :key="danyu.id"
+                  :to="`/actor/${danyu.id}`"
+                  target="_blank"
+                  >{{ danyu.name }}</router-link
                 >
               </td>
             </tr>

@@ -9,6 +9,7 @@ import ItemGallery from "@/components/ItemGallery.vue";
 export default {
   props: {
     getData: Function,
+    getInfo: Function,
     page: Number,
     query: Object
   },
@@ -16,6 +17,7 @@ export default {
     return {
       currentPage: 1,
       items: [],
+      info: {},
       end: false,
       limit: 50
     };
@@ -27,6 +29,11 @@ export default {
     param() {
       return { page: this.currentPage, limit: this.limit, ...this.query };
     }
+  },
+  metaInfo() {
+    return {
+      title: this.info.name
+    };
   },
   methods: {
     loadData() {
@@ -43,10 +50,18 @@ export default {
           this.currentPage++;
         });
       }
+    },
+    loadInfo() {
+      if (this.getInfo) {
+        this.getInfo(this.query).then(response => {
+          this.info = response.data;
+        });
+      }
     }
   },
   created() {
     this.currentPage = this.page || 1;
+    this.loadInfo();
     this.loadData();
   }
 };

@@ -1,6 +1,11 @@
 <template>
   <div class="actor-items">
-    <ItemList :getData="getData" :query="query" :page="page" />
+    <ItemList
+      :getData="getData"
+      :getInfo="getInfo"
+      :query="query"
+      :page="page"
+    />
   </div>
 </template>
 
@@ -11,31 +16,20 @@ export default {
   data() {
     return {
       page: 1,
-      director: {},
       query: {}
     };
   },
   components: {
     ItemList
   },
-  metaInfo() {
-    return {
-      title: this.director.name
-    };
-  },
   methods: {
     getData: JavDataService.getDirectorJav,
-    GetDirector() {
-      this.director = {
-        name: "TEST"
-      };
-    }
+    getInfo: JavDataService.getDirectorInfo
   },
   created() {
     this.page = this.$route.params["page"]
       ? Number(this.$route.params.page)
       : 1;
-    this.GetDirector();
     this.query = { id: Number(this.$route.params.id) };
   }
 };

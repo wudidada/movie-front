@@ -59,5 +59,25 @@ export default {
 
   getSearchResult(params) {
     return http.get("jav/search", { params });
+  },
+
+  getActorInfo(params) {
+    return http.get("jav/actor_info", { params });
+  },
+
+  getDirectorInfo(params) {
+    return http.get("jav/director_info", { params });
+  },
+
+  getMakerInfo(params) {
+    return http.get("jav/maker_info", { params });
+  },
+
+  getLabelInfo(params) {
+    return http.get("jav/label_info", { params });
+  },
+
+  getSeriesInfo(params) {
+    return http.get("jav/series_info", { params });
   }
 };

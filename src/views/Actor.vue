@@ -2,9 +2,9 @@
   <div class="actor-items">
     <ItemList
       :getData="getData"
+      :getInfo="getInfo"
       :query="query"
       :page="page"
-      :incresePage="increasePage"
     />
   </div>
 </template>
@@ -16,34 +16,20 @@ export default {
   data() {
     return {
       page: 1,
-      actor: {},
       query: {}
     };
   },
   components: {
     ItemList
   },
-  metaInfo() {
-    return {
-      title: this.actor.name
-    };
-  },
   methods: {
     getData: JavDataService.getActorJav,
-    getActor() {
-      this.actor = {
-        name: "TEST"
-      };
-    },
-    increasePage() {
-      this.page++;
-    }
+    getInfo: JavDataService.getActorInfo
   },
   created() {
     this.page = this.$route.params["page"]
       ? Number(this.$route.params.page)
       : 1;
-    this.getActor();
     this.query = { id: Number(this.$route.params.id) };
   }
 };
