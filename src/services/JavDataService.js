@@ -1,83 +1,83 @@
-import http from "./Api";
+import { jav } from "./Api";
 
 export default {
   getNewRelease(params) {
-    return http.get("/jav/new_release", { params });
+    return jav.get("/jav/new_release", { params });
   },
 
   getJav(params) {
-    return http.get("/jav/v", { params });
+    return jav.get("/jav/v", { params });
   },
 
   getActorJav(params) {
-    return http.get("/jav/actor", { params });
+    return jav.get("/jav/actor", { params });
   },
 
   getDirectorJav(params) {
-    return http.get("jav/director", { params });
+    return jav.get("jav/director", { params });
   },
 
   getMakerJav(params) {
-    return http.get("jav/maker", { params });
+    return jav.get("jav/maker", { params });
   },
 
   getLabelJav(params) {
-    return http.get("jav/label", { params });
+    return jav.get("jav/label", { params });
   },
 
   getSeriesJav(params) {
-    return http.get("jav/series", { params });
+    return jav.get("jav/series", { params });
   },
 
   getTagJav(params) {
-    return http.get("jav/tag", { params });
+    return jav.get("jav/tag", { params });
   },
 
   getActors(params) {
-    return http.get("jav/actors", { params });
+    return jav.get("jav/actors", { params });
   },
 
   getDanyus(params) {
-    return http.get("jav/danyus", { params });
+    return jav.get("jav/danyus", { params });
   },
 
   getDirectors(params) {
-    return http.get("jav/directors", { params });
+    return jav.get("jav/directors", { params });
   },
 
   getMakers(params) {
-    return http.get("jav/makers", { params });
+    return jav.get("jav/makers", { params });
   },
 
   getLabels(params) {
-    return http.get("jav/labels", { params });
+    return jav.get("jav/labels", { params });
   },
 
   getSeries(params) {
-    return http.get("jav/serieses", { params });
+    return jav.get("jav/serieses", { params });
   },
 
   getSearchResult(params) {
-    return http.get("jav/search", { params });
+    return jav.get("jav/search", { params });
   },
 
   getActorInfo(params) {
-    return http.get("jav/actor_info", { params });
+    return jav.get("jav/actor_info", { params });
   },
 
   getDirectorInfo(params) {
-    return http.get("jav/director_info", { params });
+    return jav.get("jav/director_info", { params });
   },
 
   getMakerInfo(params) {
-    return http.get("jav/maker_info", { params });
+    return jav.get("jav/maker_info", { params });
   },
 
   getLabelInfo(params) {
-    return http.get("jav/label_info", { params });
+    return jav.get("jav/label_info", { params });
   },
 
   getSeriesInfo(params) {
-    return http.get("jav/series_info", { params });
+    return jav.get("jav/series_info", { params });
   }
 };

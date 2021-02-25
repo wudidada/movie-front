@@ -31,3 +31,18 @@ Vue.filter("fID", ID => {
   }
   return ID;
 });
+
+Vue.filter("fType", type => {
+  console.log(type);
+  const typeMap = {
+    actor: "演员",
+    director: "导演",
+    maker: "制作商",
+    label: "发行商",
+    tag: "类别",
+    series: "系列",
+    dvd_id: "番号",
+    title: "标题"
+  };
+  return typeMap[type] || type;
+});

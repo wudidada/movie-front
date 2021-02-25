@@ -1,18 +1,22 @@
 <template>
   <div id="outer">
     <div class="items flex-container" @scroll="onScroll">
-      <router-link
+      <div
         class="item"
         v-for="[key, item] of Object.entries(items)"
         :key="key"
-        :to="`/${type}/${item.id}`"
-        target="_blank"
-        :title="item.name"
+        @dragend="doCopy(item.name)"
       >
         <div class="rank">{{ key }}</div>
-        <strong class="name">{{ item.name }}</strong>
-        <span class="count">({{ item.count }})</span>
-      </router-link>
+        <router-link
+          :to="`/${type}/${item.id}`"
+          target="_blank"
+          :title="item.name"
+        >
+          <strong class="name">{{ item.name }}</strong>
+          <span class="count">({{ item.count }})</span>
+        </router-link>
+      </div>
     </div>
   </div>
 </template>
@@ -75,6 +79,16 @@ export default {
         this.loadData();
         console.log("next page");
       }
+    },
+    doCopy(text) {
+      this.$copyText(text).then(
+        function() {
+          console.log("copy", text, "success!");
+        },
+        function() {
+          console.log("copy", text, "failed!");
+        }
+      );
     }
   },
   created() {
@@ -105,6 +119,11 @@ export default {
   box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.2), 0 5px 8px 0 rgba(0, 0, 0, 0.14),
     0 1px 14px 0 rgba(0, 0, 0, 0.12);
   border-radius: 5px;
+  display: flex;
+}
+
+a {
+  margin: auto auto;
 }
 
 a:hover {

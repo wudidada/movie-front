@@ -26,7 +26,7 @@ export default {
     getData: JavDataService.getSearchResult
   },
   created() {
-    this.query = { keyword: this.$route.query.keyword };
+    this.query = this.$route.query;
   }
 };
 </script>

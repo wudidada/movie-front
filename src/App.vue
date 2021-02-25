@@ -2,7 +2,7 @@
   <div id="app">
     <Nav :buttons="buttons" />
     <div id="main">
-      <router-view />
+      <router-view :key="$route.fullPath" />
     </div>
   </div>
 </template>

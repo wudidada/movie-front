@@ -39,16 +39,21 @@ export default {
     loadData() {
       if (!this.end) {
         console.log(this.param);
-        this.getData(this.param).then(response => {
-          if (response.data.length < this.limit) {
-            this.end = true;
-          }
-          this.items.push(...response.data);
-          if (this.currentPage == 1 && response.data.length == 0) {
+        this.getData(this.param)
+          .then(response => {
+            if (response.data.length < this.limit) {
+              this.end = true;
+            }
+            this.items.push(...response.data);
+            if (this.currentPage == 1 && response.data.length == 0) {
+              this.$router.replace("/404");
+            }
+            this.currentPage++;
+          })
+          .catch(() => {
+            console.log("get page failed:", this.$route.fullPath);
             this.$router.replace("/404");
-          }
-          this.currentPage++;
-        });
+          });
       }
     },
     loadInfo() {

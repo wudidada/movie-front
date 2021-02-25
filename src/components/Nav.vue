@@ -21,14 +21,103 @@
         </ul>
       </li>
     </ul>
-    <form action="/search" target="_blank" class="search-box">
-      <div class="search-container">
+    <form
+      action="/search"
+      autocomplete="off"
+      :class="['search-box', { clicked: visible }]"
+      @submit.prevent="submit"
+    >
+      <div :class="['search-container', { clicked: visible }, { droped }]">
+        <div :class="['logo-container', { visible }]">
+          <div class="pre-logo"><SearchLogo class="logo" /></div>
+        </div>
         <div class="input-wrapper">
-          <input name="keyword" class="search-input" />
+          <input
+            name="keyword"
+            class="search-input"
+            @click="visible = true"
+            @input="doSuggest"
+            v-model="text"
+            ref="input"
+          />
         </div>
         <button type="submit" id="search-btn">
           <div class="search-logo"><SearchLogo class="logo" /></div>
         </button>
+      </div>
+      <div :class="['search-dropdown', { visible: droped }]" ref="suggest">
+        <div class="split"></div>
+        <div class="drop selected">
+          <ul class="selected-list">
+            <div v-if="selected.length > 0">
+              <li class="brief">
+                <span>已选</span>
+                <div class="clear" @click="clear">
+                  <TrashLogo />
+                </div>
+              </li>
+              <div class="split"></div>
+            </div>
+            <li
+              v-for="item in selected"
+              :key="item.type + item.id"
+              @click.stop="removeSelected(item)"
+            >
+              <div class="type">
+                <strong>{{ item.type | fType }}</strong>
+              </div>
+              <div class="name">{{ item.name }}</div>
+              <div class="id">{{ item.id }}</div>
+            </li>
+          </ul>
+        </div>
+        <div class="drop suggest">
+          <ul class="suggest-list">
+            <div v-if="suggest.length > 0">
+              <li class="brief">推荐</li>
+              <div class="split"></div>
+            </div>
+            <li
+              v-for="item in suggest"
+              :key="item.type + item.id"
+              @click.stop="selectSuggestion(item)"
+            >
+              <div class="type">
+                <strong>{{ item.type | fType }}</strong>
+              </div>
+              <div class="name">{{ item.name }}</div>
+              <div class="id">{{ item.id }}</div>
+            </li>
+          </ul>
+        </div>
+        <div v-if="showHistory" class="drop history">
+          <ul>
+            <div v-if="history.length > 0">
+              <li class="brief">
+                <span>历史</span>
+                <div class="clear" @click="clearHistory">
+                  <TrashLogo />
+                </div>
+              </li>
+              <div class="split"></div>
+            </div>
+            <li
+              v-for="(historyItem, index) in history"
+              :key="index"
+              @click.stop="selectHistory(historyItem)"
+            >
+              <ul class="history-list">
+                <li v-for="item in historyItem" :key="item.type + item.id">
+                  <div class="type">
+                    <strong>{{ item.type | fType }}</strong>
+                  </div>
+                  <div class="name">{{ item.name }}</div>
+                  <div class="id">{{ item.id }}</div>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
       </div>
     </form>
   </div>
@@ -36,13 +125,42 @@
 
 <script>
 import SearchLogo from "@/assets/search.svg";
+import ElasticSearch from "@/services/ElasticSearch";
+import TrashLogo from "@/assets/trash.svg";
 
 export default {
+  data() {
+    return {
+      visible: false,
+      selected: [],
+      suggest: [],
+      history: [],
+      text: "",
+      isRefresh: false,
+      changeHistory: false
+    };
+  },
   components: {
-    SearchLogo
+    SearchLogo,
+    TrashLogo
   },
   props: {
     buttons: Array
+  },
+  computed: {
+    droped() {
+      return (
+        this.visible &&
+        (this.selected.length > 0 ||
+          this.suggest.length > 0 ||
+          this.history.length > 0)
+      );
+    },
+    showHistory() {
+      return (
+        this.visible && this.selected.length == 0 && this.suggest.length == 0
+      );
+    }
   },
   methods: {
     isActive(button) {
@@ -57,160 +175,120 @@ export default {
         }
       }
       return false;
+    },
+    selectInput() {
+      this.visible = true;
+    },
+    onClickOutside(event) {
+      const { input, suggest } = this.$refs;
+      if (
+        !input ||
+        input.contains(event.target) ||
+        !suggest ||
+        suggest.contains(event.target)
+      )
+        return;
+      this.visible = false;
+    },
+    doSuggest() {
+      if (this.isRefresh) {
+        return;
+      }
+      if (this.text == "") {
+        this.suggest.splice(0);
+        return;
+      }
+
+      this.isRefresh = true;
+      ElasticSearch.suggest(this.text).then(res => {
+        let new_suggest = res.data.hits.hits.map(data => {
+          return {
+            name: data._source.name,
+            type: data._id.split("#")[0],
+            id: data._source.id
+          };
+        });
+        this.suggest.splice(0);
+        this.suggest.push(...new_suggest);
+        this.suggest.push({ type: "dvd_id", name: this.text, id: this.text });
+        this.suggest.push({ type: "title", name: this.text, id: this.text });
+      });
+
+      this.isRefresh = false;
+    },
+    selectSuggestion(item) {
+      this.selected.push(item);
+      this.suggest.splice(0);
+      this.text = "";
+      this.changeHistory = true;
+    },
+    removeSelected(item) {
+      this.selected.splice(this.selected.indexOf(item), 1);
+      this.changeHistory = true;
+    },
+    submit() {
+      console.log("submit");
+      let query;
+      if (this.selected.length > 0) {
+        query = this.selected.reduce((acc, ele) => {
+          if (!acc[ele.type]) {
+            acc[ele.type] = ele.id;
+          } else {
+            if (Array.isArray(acc[ele.type])) {
+              acc[ele.type].push(ele.id);
+            } else {
+              acc[ele.type] = [acc[ele.type], ele.id];
+            }
+          }
+          return acc;
+        }, {});
+      } else if (this.text.length > 0) {
+        query = { keyword: this.text };
+      }
+      console.log(query);
+      if (this.changeHistory) {
+        this.saveHistory();
+        this.changeHistory = false;
+      }
+
+      if (query) {
+        this.$router.push({ path: "/search", query }).catch(() => {
+          this.$router.push("/404");
+        });
+      }
+    },
+    clear() {
+      this.selected.splice(0);
+    },
+    selectHistory(history) {
+      this.history.splice(this.history.indexOf(history), 1);
+      this.history.unshift(history);
+      this.selected.push(...history);
+    },
+    saveHistory() {
+      this.history.unshift([...this.selected]);
+      this.history.slice(0, 6);
+    },
+    clearHistory() {
+      this.history.splice(0);
+    }
+  },
+  mounted() {
+    document.addEventListener("click", this.onClickOutside);
+    if (localStorage.history) {
+      this.history.push(...JSON.parse(localStorage.history));
+    }
+    console.log(this.history);
+  },
+  beforeDestroy() {
+    document.removeEventListener("click", this.onClickOutside);
+  },
+  watch: {
+    history(newHistory) {
+      localStorage.history = JSON.stringify(newHistory);
     }
   }
 };
 </script>
 
-<style scoped>
-#nav {
-  position: sticky;
-  top: 0;
-  padding: 5px 60px;
-  width: 100%;
-  height: 60px;
-  background-color: #fff;
-  border-bottom-color: rgba(0, 0, 0, 0.12);
-  border-style: solid;
-  border-width: 0 0 thin;
-  align-items: center;
-}
-
-#nav > ul {
-  display: flex;
-  list-style-type: none;
-  height: 40px;
-  line-height: 40px;
-  margin: 0;
-  padding: 0;
-}
-
-#nav ul li {
-  display: inline-block;
-  margin: 0 0.6em;
-  position: relative;
-}
-
-.nav-link {
-  padding-bottom: 3px;
-  color: #304455;
-}
-
-.nav-link:hover,
-.router-link-active,
-.active {
-  border-bottom: 3px solid #42b983;
-}
-
-.nav-dropdown-container {
-  padding-right: 0.8em;
-}
-
-.nav-dropdown-container .nav-link:hover:not(.router-link-active) {
-  border-bottom: none;
-}
-
-.arrow {
-  display: inline-block;
-  vertical-align: middle;
-  margin-top: -1px;
-  margin-left: 6px;
-  margin-right: -14px;
-  width: 0;
-  height: 0;
-  border-left: 4px solid transparent;
-  border-right: 4px solid transparent;
-  border-top: 5px solid #4f5959;
-}
-
-.nav-dropdown {
-  display: none;
-  max-height: calc(100vh - 61px);
-  padding: 5px 0;
-  overflow-y: auto;
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-bottom-color: #ccc;
-  text-align: left;
-  border-radius: 4px;
-  white-space: nowrap;
-}
-
-.nav-dropdown-container:hover .nav-dropdown {
-  display: block;
-}
-
-.nav-dropdown a:hover {
-  color: #42b983;
-}
-
-.nav-dropdown .router-link-active {
-  color: #42b983;
-  border-bottom: none;
-}
-
-#nav .nav-dropdown .router-link-active::after {
-  content: "";
-  width: 0;
-  height: 0;
-  border-bottom: 5px solid #42b983;
-  border-left: 3px solid transparent;
-  border-right: 3px solid transparent;
-  position: absolute;
-  bottom: 0;
-  left: calc(50% - 3px);
-  transform: translateY(-50%);
-}
-
-.search-box {
-  position: fixed;
-  right: 60px;
-}
-
-.search-container {
-  display: flex;
-  border: 1px solid #dfe1e5;
-  border-radius: 24px;
-  height: 40px;
-  width: 400px;
-  margin: 0 auto;
-}
-
-.input-wrapper {
-  padding: 5px 4px 0 20px;
-  padding-top: 0;
-  flex: 1;
-  display: flex;
-}
-
-.search-input {
-  flex: 1;
-  outline: none;
-  border: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex: 100%;
-
-  /* flex: 1; */
-}
-
-#search-btn {
-  border: None;
-  background: transparent;
-  padding: 0;
-  flex: 0 0 auto;
-  padding-right: 13px;
-  height: 40px;
-  width: 40px;
-}
-
-.logo {
-  width: 24px;
-  height: 24px;
-  fill: #4285f4;
-}
-</style>
+<style scoped src="./Nav.css"></style>
