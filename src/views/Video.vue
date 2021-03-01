@@ -1,5 +1,5 @@
 <template>
-  <Article :jav="jav" :comment="comment" :rate="rate / 2" />
+  <Article :jav="jav" :comment="comment" :rate="rate" />
 </template>
 
 <script>

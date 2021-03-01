@@ -131,7 +131,7 @@
               <td colspan="2" class="watched-message">
                 <div class="watch-date">{{ getWatched(jav).date | fDate }}</div>
                 <el-rate
-                  v-model="rate"
+                  v-model="rating"
                   allow-half
                   show-text
                   @change="updateRate"
@@ -165,7 +165,8 @@ export default {
   },
   data() {
     return {
-      isInput: false
+      isInput: false,
+      rating: 0
     };
   },
   props: {
@@ -199,6 +200,9 @@ export default {
       this.updateWatched({ cid: this.jav.cid, comment: this.comment });
       this.isInput = false;
     }
+  },
+  mounted() {
+    this.rating = this.rate / 2;
   }
 };
 </script>
