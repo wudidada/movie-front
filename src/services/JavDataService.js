@@ -79,5 +79,9 @@ export default {
 
   getSeriesInfo(params) {
     return jav.get("jav/series_info", { params });
+  },
+
+  getByCids(params) {
+    return jav.get("jav/cids", { params });
   }
 };

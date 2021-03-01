@@ -17,6 +17,9 @@
         <div v-if="item.score" class="score">{{ item.score | fScore }}</div>
       </router-link>
     </div>
+    <div v-if="slideButton" class="backtop" @click="slideToTop">
+      <i class="el-icon-caret-top"></i>
+    </div>
   </div>
 </template>
 
@@ -27,7 +30,8 @@ export default {
   },
   data() {
     return {
-      isRresh: false
+      isRresh: false,
+      slideButton: false
     };
   },
   watch: {
@@ -51,26 +55,34 @@ export default {
 
       return id;
     },
+    slideToTop() {
+      window.scrollTo({
+        left: 0,
+        top: 0,
+        behavior: "smooth"
+      });
+    },
     onScroll() {
       //变量scrollTop是滚动条滚动时，距离顶部的距离
       // console.log("scroll");
       let scrollTop = Math.ceil(
         document.documentElement.scrollTop || document.body.scrollTop
       );
-      //变量windowHeight是可视区的高度
       let windowHeight = Math.ceil(
         document.documentElement.clientHeight || document.body.clientHeight
       );
-      //变量scrollHeight是滚动条的总高度
       let scrollHeight =
         document.documentElement.scrollHeight || document.body.scrollHeight;
-      //滚动条到底部的条件
       // console.log(scrollTop, windowHeight, scrollHeight);
       if (!this.isRresh && scrollTop + windowHeight >= scrollHeight) {
-        //到了这个就可以进行业务逻辑加载后台数据了
         this.isRresh = true;
         this.$emit("scrollReachBottom");
         console.log("next page");
+      }
+      if (scrollTop > windowHeight * 1.2) {
+        this.slideButton = true;
+      } else {
+        this.slideButton = false;
       }
     }
   },
@@ -143,5 +155,23 @@ img {
   height: auto;
   margin-left: auto;
   margin-right: auto;
+}
+
+.backtop {
+  position: fixed;
+  background-color: #fff;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  color: #409eff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  box-shadow: 0 0 6px rgb(0 0 0 / 12%);
+  cursor: pointer;
+  z-index: 5;
+  right: 40px;
+  bottom: 40px;
 }
 </style>

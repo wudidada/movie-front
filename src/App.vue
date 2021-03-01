@@ -14,6 +14,15 @@ export default {
   components: { Nav },
   data: () => ({
     buttons: [
+      {
+        name: "我的",
+        url: "/my/watched",
+        sub: [
+          { name: "已看", url: "/my/watched" },
+          { name: "想看", url: "/my/subscribed" },
+          { name: "已有", url: "/my/owned" }
+        ]
+      },
       { name: "最新", url: "/new_release" },
       {
         name: "演员",

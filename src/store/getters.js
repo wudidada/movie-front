@@ -23,5 +23,10 @@ export default {
     return jav => {
       return state.watched[jav.cid];
     };
+  },
+  getCids(state) {
+    return type => {
+      return Object.keys(state[type]);
+    };
   }
 };
