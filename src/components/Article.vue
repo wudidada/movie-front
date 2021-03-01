@@ -131,7 +131,7 @@
               <td colspan="2" class="watched-message">
                 <div class="watch-date">{{ getWatched(jav).date | fDate }}</div>
                 <el-rate
-                  v-model="getWatched(jav).rate"
+                  v-model="rate"
                   allow-half
                   show-text
                   @change="updateRate"
