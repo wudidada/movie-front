@@ -53,8 +53,12 @@ export default {
     if (jav.rate) {
       Object.assign(state.watched[jav.cid], { rate: jav.rate });
     }
-    if (jav.comment) {
-      Object.assign(state.watched[jav.cid], { comment: jav.comment });
+    if ("comment" in jav) {
+      if (jav.comment == "") {
+        Vue.delete(state.watched[jav.cid], "comment");
+      } else {
+        Object.assign(state.watched[jav.cid], { comment: jav.comment });
+      }
     }
   }
 };

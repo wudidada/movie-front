@@ -136,8 +136,8 @@
                   show-text
                   @change="updateRate"
                 ></el-rate>
-                <div class="comment" v-if="!isInput">{{ comment }}</div>
-                <el-input v-else v-model="comment"></el-input>
+                <div class="comment" v-if="!isInput">{{ javComment }}</div>
+                <el-input v-else v-model="javComment"></el-input>
 
                 <el-button size="medium" v-if="!isInput" @click="inputComment"
                   >评论</el-button
@@ -166,7 +166,8 @@ export default {
   data() {
     return {
       isInput: false,
-      rating: 0
+      rating: 0,
+      javComment: ""
     };
   },
   props: {
@@ -197,12 +198,17 @@ export default {
       this.isInput = true;
     },
     updateComment() {
-      this.updateWatched({ cid: this.jav.cid, comment: this.comment });
+      this.updateWatched({ cid: this.jav.cid, comment: this.javComment });
       this.isInput = false;
     }
   },
-  mounted() {
-    this.rating = this.rate / 2;
+  watch: {
+    rate(newRate) {
+      this.rating = newRate / 2;
+    },
+    comment(newComment) {
+      this.javComment = newComment;
+    }
   }
 };
 </script>
