@@ -127,6 +127,7 @@
 import SearchLogo from "@/assets/search.svg";
 import ElasticSearch from "@/services/ElasticSearch";
 import TrashLogo from "@/assets/trash.svg";
+import { mapMutations, mapState } from "vuex";
 
 export default {
   data() {
@@ -134,7 +135,6 @@ export default {
       visible: false,
       selected: [],
       suggest: [],
-      history: [],
       text: "",
       isRefresh: false,
       changeHistory: false
@@ -160,9 +160,11 @@ export default {
       return (
         this.visible && this.selected.length == 0 && this.suggest.length == 0
       );
-    }
+    },
+    ...mapState(["history"])
   },
   methods: {
+    ...mapMutations(["clearHistory", "saveHistory"]),
     isActive(button) {
       if (this.$route.path === button.url) {
         return true;
@@ -227,7 +229,6 @@ export default {
       this.changeHistory = true;
     },
     submit() {
-      console.log("submit");
       let query;
       if (this.selected.length > 0) {
         query = this.selected.reduce((acc, ele) => {
@@ -244,48 +245,59 @@ export default {
         }, {});
       } else if (this.text.length > 0) {
         query = { keyword: this.text };
+        if (this.history.length == 0 || this.text != this.history[0][0].name) {
+          this.changeHistory = true;
+        }
       }
-      console.log(query);
       if (this.changeHistory) {
-        this.saveHistory();
+        this.saveSearchHistory();
         this.changeHistory = false;
       }
 
       if (query) {
-        this.$router.push({ path: "/search", query }).catch(() => {
-          this.$router.push("/404");
+        this.$router.push({ path: "/search", query }).catch(error => {
+          if (error.name != "NavigationDuplicated") {
+            throw error;
+          }
         });
       }
     },
     clear() {
       this.selected.splice(0);
     },
-    selectHistory(history) {
-      this.history.splice(this.history.indexOf(history), 1);
-      this.history.unshift(history);
-      this.selected.push(...history);
+    selectHistory(currentHistory) {
+      this.history.splice(this.history.indexOf(currentHistory), 1);
+      this.history.unshift(currentHistory);
+      this.selected.push(...currentHistory);
+      if (this.selected[0].type == "keyword") {
+        this.text = this.selected[0].name;
+        this.selected.pop();
+      }
     },
-    saveHistory() {
-      this.history.unshift([...this.selected]);
-      this.history.slice(0, 6);
-    },
-    clearHistory() {
-      this.history.splice(0);
+    saveSearchHistory() {
+      if (this.selected.length == 0) {
+        this.history.unshift([
+          {
+            type: "keyword",
+            name: this.text,
+            id: this.text
+          }
+        ]);
+      } else {
+        this.history.unshift([...this.selected]);
+      }
+      this.history.splice(6);
     }
   },
   mounted() {
     document.addEventListener("click", this.onClickOutside);
-    if (localStorage.history) {
-      this.history.push(...JSON.parse(localStorage.history));
-    }
-    console.log(this.history);
   },
   beforeDestroy() {
     document.removeEventListener("click", this.onClickOutside);
   },
   watch: {
-    history(newHistory) {
-      localStorage.history = JSON.stringify(newHistory);
+    history() {
+      this.saveHistory();
     }
   }
 };

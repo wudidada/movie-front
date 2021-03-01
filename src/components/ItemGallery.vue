@@ -6,7 +6,6 @@
         v-for="item in items"
         :key="item.pid"
         :to="`/v/${item.cid}`"
-        target="_blank"
         :title="item.title"
       >
         <div class="id" :title="getID(item)">{{ getID(item) | fID }}</div>

@@ -5,6 +5,14 @@ Vue.filter("fScore", value => {
   return parseFloat(value.toFixed(1));
 });
 
+Vue.filter("fDate", date => {
+  if (!date) return date;
+  if (date instanceof Date) {
+    date = date.toJSON();
+  }
+  return date.slice(0, 10);
+});
+
 Vue.filter("smallPic", url => {
   if (!url) return url;
   let i = url.lastIndexOf("pl");
@@ -33,7 +41,6 @@ Vue.filter("fID", ID => {
 });
 
 Vue.filter("fType", type => {
-  console.log(type);
   const typeMap = {
     actor: "演员",
     director: "导演",
@@ -42,7 +49,8 @@ Vue.filter("fType", type => {
     tag: "类别",
     series: "系列",
     dvd_id: "番号",
-    title: "标题"
+    title: "标题",
+    keyword: "关键词"
   };
   return typeMap[type] || type;
 });

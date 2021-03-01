@@ -25,27 +25,19 @@
             <tr v-if="jav['director']">
               <td class="key">导演</td>
               <td class="value">
-                <router-link
-                  :to="`/director/${jav.director.id}`"
-                  target="_blank"
-                  >{{ jav.director.name }}</router-link
-                >
+                <LinkItem :item="jav.director" type="director" />
               </td>
             </tr>
             <tr v-if="jav['maker']">
               <td class="key">制作商</td>
               <td class="value">
-                <router-link :to="`/maker/${jav.maker.id}`" target="_blank">{{
-                  jav.maker.name
-                }}</router-link>
+                <LinkItem :item="jav.maker" type="maker" />
               </td>
             </tr>
             <tr v-if="jav['label']">
               <td class="key">发行商</td>
               <td class="value">
-                <router-link :to="`/label/${jav.label.id}`" target="_blank">{{
-                  jav.label.name
-                }}</router-link>
+                <LinkItem :item="jav.label" type="label" />
               </td>
             </tr>
             <tr v-if="jav['series']">
@@ -77,13 +69,12 @@
             <tr>
               <td class="key">演员</td>
               <td class="value">
-                <router-link
+                <LinkItem
                   v-for="actor in jav.actors"
                   :key="actor.id"
-                  :to="`/actor/${actor.id}`"
-                  target="_blank"
-                  >{{ actor.name }}</router-link
-                >
+                  :item="actor"
+                  type="actor"
+                />
               </td>
             </tr>
             <tr v-if="jav['danyus'] && jav.danyus.length > 0">
@@ -98,6 +89,64 @@
                 >
               </td>
             </tr>
+            <tr>
+              <td colspan="2" class="intrest">
+                <div
+                  v-if="isWatched(jav)"
+                  class="watched marked"
+                  @click="delWatched(jav)"
+                >
+                  看过
+                </div>
+                <div v-else class="watched unmarked" @click="addWatched(jav)">
+                  看过
+                </div>
+                <div
+                  v-if="isSubscribed(jav)"
+                  class="subscribed marked"
+                  @click="delSubscribed(jav)"
+                >
+                  想看
+                </div>
+                <div
+                  v-else
+                  class="subscribed unmarked"
+                  @click="addSubscribed(jav)"
+                >
+                  想看
+                </div>
+                <div
+                  v-if="isOwned(jav)"
+                  class="owned marked"
+                  @click="delOwned(jav)"
+                >
+                  拥有
+                </div>
+                <div v-else class="owned unmarked" @click="addOwned(jav)">
+                  拥有
+                </div>
+              </td>
+            </tr>
+            <tr v-if="isWatched(jav)">
+              <td colspan="2" class="watched-message">
+                <div class="watch-date">{{ getWatched(jav).date | fDate }}</div>
+                <el-rate
+                  v-model="getWatched(jav).rate"
+                  allow-half
+                  show-text
+                  @change="updateRate"
+                ></el-rate>
+                <div class="comment" v-if="!isInput">{{ comment }}</div>
+                <el-input v-else v-model="comment"></el-input>
+
+                <el-button size="medium" v-if="!isInput" @click="inputComment"
+                  >评论</el-button
+                >
+                <el-button size="medium" v-if="isInput" @click="updateComment"
+                  >确定</el-button
+                >
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -107,13 +156,48 @@
 </template>
 
 <script>
+import LinkItem from "./LinkItem.vue";
+import { mapActions, mapGetters } from "vuex";
+
 export default {
+  components: {
+    LinkItem
+  },
+  data() {
+    return {
+      isInput: false
+    };
+  },
   props: {
-    jav: Object
+    jav: Object,
+    comment: String,
+    rate: Number
   },
   computed: {
     title() {
       return `${this.jav.dvd_id} ${this.jav.title}`;
+    },
+    ...mapGetters(["isOwned", "isSubscribed", "isWatched", "getWatched"])
+  },
+  methods: {
+    ...mapActions([
+      "addOwned",
+      "delOwned",
+      "addSubscribed",
+      "delSubscribed",
+      "addWatched",
+      "delWatched",
+      "updateWatched"
+    ]),
+    updateRate(rating) {
+      this.updateWatched({ cid: this.jav.cid, rate: rating * 2 });
+    },
+    inputComment() {
+      this.isInput = true;
+    },
+    updateComment() {
+      this.updateWatched({ cid: this.jav.cid, comment: this.comment });
+      this.isInput = false;
     }
   }
 };
@@ -165,5 +249,45 @@ img {
 #desc {
   margin: 30px;
   text-indent: 2em;
+}
+
+.intrest {
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: 3rem;
+}
+
+.intrest div {
+  cursor: pointer;
+  background-color: #fff;
+  border: 1px solid #dcdcdc;
+  color: #363636;
+  cursor: pointer;
+  justify-content: center;
+  margin: 0.5em;
+  padding: 0.5em;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.unmarked:hover {
+  background-color: #e9e9e9;
+}
+
+.intrest .marked {
+  background-color: #333333;
+  color: white;
+}
+
+.watch-date {
+  color: #999;
+}
+
+.watched-message {
+  padding-left: 3.5rem;
+}
+
+.watched-message div {
+  margin: 8px 0;
 }
 </style>
