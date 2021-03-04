@@ -19,7 +19,8 @@ export default {
       items: [],
       info: {},
       end: false,
-      limit: 50
+      limit: 50,
+      isLoading: false
     };
   },
   components: {
@@ -37,7 +38,8 @@ export default {
   },
   methods: {
     loadData() {
-      if (!this.end) {
+      if (!this.end && !this.isLoading) {
+        this.isLoading = true;
         console.log(this.param);
         this.getData(this.param)
           .then(response => {
@@ -49,6 +51,7 @@ export default {
               this.$router.replace("/404");
             }
             this.currentPage++;
+            this.isLoading = false;
           })
           .catch(() => {
             console.log("get page failed:", this.$route.fullPath);

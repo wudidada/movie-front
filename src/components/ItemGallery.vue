@@ -30,14 +30,8 @@ export default {
   },
   data() {
     return {
-      isRresh: false,
       slideButton: false
     };
-  },
-  watch: {
-    items: function() {
-      this.isRresh = false;
-    }
   },
   methods: {
     getPubDate(item) {
@@ -74,8 +68,7 @@ export default {
       let scrollHeight =
         document.documentElement.scrollHeight || document.body.scrollHeight;
       // console.log(scrollTop, windowHeight, scrollHeight);
-      if (!this.isRresh && scrollTop + windowHeight >= scrollHeight) {
-        this.isRresh = true;
+      if (scrollTop + windowHeight >= scrollHeight) {
         this.$emit("scrollReachBottom");
         console.log("next page");
       }
