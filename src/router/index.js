@@ -19,6 +19,7 @@ import SearchResult from "../views/SearchResult.vue";
 import MyWatched from "../views/MyWatched.vue";
 import MySubscribed from "../views/MySubscribed.vue";
 import MyOwned from "../views/MyOwned.vue";
+import Like from "../views/Like.vue";
 
 Vue.use(VueRouter);
 
@@ -117,6 +118,11 @@ const routes = [
     path: "/my/owned",
     name: "Owned",
     component: MyOwned
+  },
+  {
+    path: "/likes/:type",
+    name: "Like",
+    component: Like
   },
   {
     path: "*",

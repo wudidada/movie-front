@@ -60,7 +60,6 @@ export default {
     },
     onScroll() {
       //变量scrollTop是滚动条滚动时，距离顶部的距离
-      console.log("scroll");
       let scrollTop = Math.ceil(
         document.documentElement.scrollTop || document.body.scrollTop
       );

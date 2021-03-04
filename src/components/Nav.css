@@ -11,6 +11,35 @@
   align-items: center;
 }
 
+.user {
+  position: absolute;
+  left: 8em;
+  cursor: pointer;
+}
+
+.user-drop {
+  position: absolute;
+  top: 40px;
+  background-color: #fff;
+  padding: 60px 60px 20px 0;
+  border: 1px solid #ddd;
+  border-bottom-color: #ccc;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.myinfo .user-drop {
+  padding: 0;
+}
+
+.ruleForm {
+  width: 300px;
+}
+
+.favorite {
+  margin: 8px 0;
+}
+
 #nav > ul {
   display: flex;
   list-style-type: none;

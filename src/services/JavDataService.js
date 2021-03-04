@@ -14,74 +14,79 @@ export default {
   },
 
   getDirectorJav(params) {
-    return jav.get("jav/director", { params });
+    return jav.get("/jav/director", { params });
   },
 
   getMakerJav(params) {
-    return jav.get("jav/maker", { params });
+    return jav.get("/jav/maker", { params });
   },
 
   getLabelJav(params) {
-    return jav.get("jav/label", { params });
+    return jav.get("/jav/label", { params });
   },
 
   getSeriesJav(params) {
-    return jav.get("jav/series", { params });
+    return jav.get("/jav/series", { params });
   },
 
   getTagJav(params) {
-    return jav.get("jav/tag", { params });
+    return jav.get("/jav/tag", { params });
   },
 
   getActors(params) {
-    return jav.get("jav/actors", { params });
+    return jav.get("/jav/actors", { params });
   },
 
   getDanyus(params) {
-    return jav.get("jav/danyus", { params });
+    return jav.get("/jav/danyus", { params });
   },
 
   getDirectors(params) {
-    return jav.get("jav/directors", { params });
+    return jav.get("/jav/directors", { params });
   },
 
   getMakers(params) {
-    return jav.get("jav/makers", { params });
+    return jav.get("/jav/makers", { params });
   },
 
   getLabels(params) {
-    return jav.get("jav/labels", { params });
+    return jav.get("/jav/labels", { params });
   },
 
   getSeries(params) {
-    return jav.get("jav/serieses", { params });
+    return jav.get("/jav/serieses", { params });
   },
 
   getSearchResult(params) {
-    return jav.get("jav/search", { params });
+    return jav.get("/jav/search", { params });
   },
 
   getActorInfo(params) {
-    return jav.get("jav/actor_info", { params });
+    return jav.get("/jav/actor_info", { params });
   },
 
   getDirectorInfo(params) {
-    return jav.get("jav/director_info", { params });
+    return jav.get("/jav/director_info", { params });
   },
 
   getMakerInfo(params) {
-    return jav.get("jav/maker_info", { params });
+    return jav.get("/jav/maker_info", { params });
   },
 
   getLabelInfo(params) {
-    return jav.get("jav/label_info", { params });
+    return jav.get("/jav/label_info", { params });
   },
 
   getSeriesInfo(params) {
-    return jav.get("jav/series_info", { params });
+    return jav.get("/jav/series_info", { params });
   },
 
   getByCids(params) {
-    return jav.get("jav/cids", { params });
+    return jav.get("/jav/cids", { params });
+  },
+
+  getLikesByIds(ids, type) {
+    console.log(ids, type);
+    return jav.get("/jav/ids", { params: { ids, type } });
   }
 };

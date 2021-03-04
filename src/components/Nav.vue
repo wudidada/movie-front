@@ -1,5 +1,52 @@
 <template>
   <div id="nav" class="flex-container">
+    <div class="user" ref="user">
+      <div v-if="token" class="myinfo" @click="register">
+        <div>{{ name }}</div>
+        <div v-if="showUserDrop" class="user-drop">
+          <el-card class="box-card">
+            <div slot="header" class="clearfix">
+              <span>我喜爱的</span>
+            </div>
+            <div v-for="(value, type) in likes" :key="type" class="favorite">
+              <router-link
+                :to="`/likes/${type}`"
+                class="list-link"
+                @click.native="toggleDrop"
+                >{{ type | fType }}</router-link
+              >
+            </div>
+            <el-button type="primary" @click="logout">退出</el-button>
+          </el-card>
+        </div>
+      </div>
+      <div v-else class="registry" @click="register">
+        <div>注册 / 登录</div>
+        <div v-if="showUserDrop" class="user-drop">
+          <el-form
+            :model="loginForm"
+            :rules="rules"
+            ref="loginForm"
+            class="loginForm"
+            label-width="100px"
+            width="300px"
+          >
+            <el-form-item label="用户名" prop="name">
+              <el-input v-model="loginForm.name"></el-input>
+            </el-form-item>
+            <el-form-item label="密码" prop="password">
+              <el-input v-model="loginForm.password"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="submitForm('loginForm')"
+                >注册</el-button
+              >
+              <el-button @click="login('loginForm')">登录</el-button>
+            </el-form-item>
+          </el-form>
+        </div>
+      </div>
+    </div>
     <ul>
       <li
         v-for="button in buttons"
@@ -127,7 +174,8 @@
 import SearchLogo from "@/assets/search.svg";
 import ElasticSearch from "@/services/ElasticSearch";
 import TrashLogo from "@/assets/trash.svg";
-import { mapMutations, mapState } from "vuex";
+import { mapActions, mapMutations, mapState } from "vuex";
+import UserDataService from "../services/UserDataService";
 
 export default {
   data() {
@@ -137,7 +185,16 @@ export default {
       suggest: [],
       text: "",
       isRefresh: false,
-      changeHistory: false
+      changeHistory: false,
+      showUserDrop: false,
+      loginForm: {
+        name: "",
+        password: ""
+      },
+      rules: {
+        name: [{ required: true, message: "用户名", trigger: "blur" }],
+        password: [{ required: true, message: "密码", trigger: "blur" }]
+      }
     };
   },
   components: {
@@ -161,10 +218,11 @@ export default {
         this.visible && this.selected.length == 0 && this.suggest.length == 0
       );
     },
-    ...mapState(["history"])
+    ...mapState(["history", "token", "name", "likes"])
   },
   methods: {
-    ...mapMutations(["clearHistory", "saveHistory"]),
+    ...mapMutations(["clearHistory", "saveHistory", "updateToken", "logout"]),
+    ...mapActions(["initState"]),
     isActive(button) {
       if (this.$route.path === button.url) {
         return true;
@@ -182,15 +240,13 @@ export default {
       this.visible = true;
     },
     onClickOutside(event) {
-      const { input, suggest } = this.$refs;
-      if (
-        !input ||
-        input.contains(event.target) ||
-        !suggest ||
-        suggest.contains(event.target)
-      )
-        return;
-      this.visible = false;
+      const { input, suggest, user } = this.$refs;
+      if (!input.contains(event.target) && !suggest.contains(event.target)) {
+        this.visible = false;
+      }
+      if (!user.contains(event.target)) {
+        this.showUserDrop = false;
+      }
     },
     doSuggest() {
       if (this.isRefresh) {
@@ -287,6 +343,44 @@ export default {
         this.history.unshift([...this.selected]);
       }
       this.history.splice(6);
+    },
+    register() {
+      this.showUserDrop = true;
+    },
+    submitForm(formname) {
+      this.$refs[formname].validate(valid => {
+        if (valid) {
+          UserDataService.register(this.loginForm)
+            .then(() => {
+              this.$message({ message: "注册成功", type: "success" });
+              this.showUserDrop = false;
+            })
+            .catch(err => this.$message.error(err.response.data.msg));
+        }
+      });
+    },
+    login(formname) {
+      this.$refs[formname].validate(valid => {
+        if (valid) {
+          UserDataService.login(this.loginForm)
+            .then(response => {
+              if (response.status == 200) {
+                this.$message({ message: "登录成功", type: "success" });
+                this.showUserDrop = false;
+                this.updateToken(response.data.token);
+                this.initState(response.data);
+              } else {
+                this.$message.error(response.data.msg);
+              }
+            })
+            .catch(err => {
+              this.$message.error(err.response.data.msg);
+            });
+        }
+      });
+    },
+    toggleDrop() {
+      this.showUserDrop = !this.showUserDrop;
     }
   },
   mounted() {

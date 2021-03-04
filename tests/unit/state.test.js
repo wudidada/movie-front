@@ -1,6 +1,3 @@
-let a = {
-  a: "a",
-  b: this.a + "b"
-};
+import state from "../../src/store/state";
 
-console.log(a.b);
+console.log(state);

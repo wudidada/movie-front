@@ -1,7 +1,7 @@
 export default {
   isLiked(state) {
     return item => {
-      return state.likes[item.type].some(a => a.id == item.id);
+      return state.likes[item.type][item.id];
     };
   },
   isOwned(state) {
@@ -27,6 +27,11 @@ export default {
   getCids(state) {
     return type => {
       return Object.keys(state[type]);
+    };
+  },
+  getLikesIds(state) {
+    return type => {
+      return Object.keys(state.likes[type]);
     };
   }
 };
