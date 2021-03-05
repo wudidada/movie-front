@@ -88,5 +88,13 @@ export default {
   getLikesByIds(ids, type) {
     console.log(ids, type);
     return jav.get("/jav/ids", { params: { ids, type } });
+  },
+
+  translate(text) {
+    return jav.get("/jav/translate", { params: { text } });
+  },
+
+  isMonthly(cid) {
+    return jav.get("/jav/monthly", { params: { cid } });
   }
 };

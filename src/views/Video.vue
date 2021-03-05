@@ -31,7 +31,7 @@ export default {
       JavDataService.getJav({ cid })
         .then(res => {
           if (!res.data) this.redirect();
-          this.jav = res.data;
+          this.jav = Object.assign({}, this.jav, res.data);
         })
         .then(() => {
           const watched = this.getWatched(this.jav);
@@ -40,6 +40,8 @@ export default {
             this.rate = this.getWatched(this.jav).rate || 0;
           }
         })
+        .then(() => JavDataService.translate(this.jav.desc))
+        .then(result => this.$set(this.jav, "desc", result.data))
         .catch(() => this.redirect());
     },
     redirect() {

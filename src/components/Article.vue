@@ -8,6 +8,15 @@
         <img :src="jav.cover | largePic" />
       </div>
       <div id="detail">
+        <div class="monthly">
+          <el-button
+            type="primary"
+            icon="el-icon-check"
+            circle
+            :loading="checkingMonthly"
+            @click="checkMonthly"
+          ></el-button>
+        </div>
         <table class="detail-table">
           <tbody>
             <tr>
@@ -158,6 +167,7 @@
 <script>
 import LinkItem from "./LinkItem.vue";
 import { mapActions, mapGetters } from "vuex";
+import JavDataService from "../services/JavDataService";
 
 export default {
   components: {
@@ -167,7 +177,8 @@ export default {
     return {
       isInput: false,
       rating: 0,
-      javComment: ""
+      javComment: "",
+      checkingMonthly: false
     };
   },
   props: {
@@ -200,6 +211,25 @@ export default {
     updateComment() {
       this.updateWatched({ cid: this.jav.cid, comment: this.javComment });
       this.isInput = false;
+    },
+    checkMonthly() {
+      if (!this.checkingMonthly) {
+        JavDataService.isMonthly(this.jav.cid)
+          .then(response => {
+            const data = response.data;
+            if (data.success) {
+              const title = data.monthly ? "月额" : "非月额";
+
+              this.$notify.success({
+                title,
+                message: data.bitrate + "kbps"
+              });
+            } else {
+              this.$notify.warning({ title: "未找到" });
+            }
+          })
+          .catch(() => this.$notify.error({ title: "查询失败" }));
+      }
     }
   },
   watch: {
@@ -234,6 +264,10 @@ img {
   flex-grow: 1;
   width: 30%;
   padding: 0.75rem;
+}
+
+.monthly {
+  float: right;
 }
 
 .detail-table > tbody > tr {
