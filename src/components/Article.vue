@@ -214,6 +214,7 @@ export default {
     },
     checkMonthly() {
       if (!this.checkingMonthly) {
+        this.checkingMonthly = true;
         JavDataService.isMonthly(this.jav.cid)
           .then(response => {
             const data = response.data;
@@ -228,7 +229,8 @@ export default {
               this.$notify.warning({ title: "未找到" });
             }
           })
-          .catch(() => this.$notify.error({ title: "查询失败" }));
+          .catch(() => this.$notify.error({ title: "查询失败" }))
+          .finally(() => (this.checkingMonthly = false));
       }
     }
   },
