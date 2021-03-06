@@ -16,7 +16,6 @@ import MakerList from "../views/MakerList.vue";
 import LabelList from "../views/LabelList.vue";
 import SeriesList from "../views/SeriesList.vue";
 import SearchResult from "../views/SearchResult.vue";
-import MyPage from "../views/MyPage.vue";
 import Like from "../views/Like.vue";
 
 Vue.use(VueRouter);
@@ -105,7 +104,7 @@ const routes = [
   {
     path: "/my/:type",
     name: "MyPage",
-    component: MyPage
+    component: () => import("@/views/MyPage.vue")
   },
   {
     path: "/likes/:type",
