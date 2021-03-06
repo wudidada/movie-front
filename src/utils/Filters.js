@@ -7,10 +7,12 @@ Vue.filter("fScore", value => {
 
 Vue.filter("fDate", date => {
   if (!date) return date;
+  let dateString = date;
   if (date instanceof Date) {
-    date = date.toJSON();
+    date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
+    dateString = date.toJSON();
   }
-  return date.slice(0, 10);
+  return dateString.slice(0, 10);
 });
 
 Vue.filter("smallPic", url => {
@@ -50,7 +52,10 @@ Vue.filter("fType", type => {
     series: "系列",
     dvd_id: "番号",
     title: "标题",
-    keyword: "关键词"
+    keyword: "关键词",
+    watched: "已看",
+    subscribed: "想看",
+    owned: "拥有"
   };
   return typeMap[type] || type;
 });

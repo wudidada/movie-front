@@ -96,5 +96,9 @@ export default {
 
   isMonthly(cid) {
     return jav.get("/jav/monthly", { params: { cid } });
+  },
+
+  getCid(dvd_id) {
+    return jav.get("/jav/dvd_to_cid", { params: { dvd_id } });
   }
 };

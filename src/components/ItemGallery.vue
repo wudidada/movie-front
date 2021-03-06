@@ -1,5 +1,8 @@
 <template>
   <div id="outer" class="flex-container">
+    <div class="slot-button">
+      <slot></slot>
+    </div>
     <div class="items flex-container">
       <router-link
         class="item"
@@ -102,6 +105,11 @@ export default {
   box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.2), 0 5px 8px 0 rgba(0, 0, 0, 0.14),
     0 1px 14px 0 rgba(0, 0, 0, 0.12);
   border-radius: 5px;
+}
+
+.slot-button {
+  position: fixed;
+  right: 40px;
 }
 
 .id {

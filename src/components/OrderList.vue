@@ -8,11 +8,7 @@
         @dragend="doCopy(item.name)"
       >
         <div class="rank">{{ key }}</div>
-        <router-link
-          :to="`/${type}/${item.id}`"
-          target="_blank"
-          :title="item.name"
-        >
+        <router-link :to="`/${type}/${item.id}`" :title="item.name">
           <strong class="name">{{ item.name }}</strong>
           <span class="count">({{ item.count }})</span>
         </router-link>

@@ -33,5 +33,8 @@ export default {
     return type => {
       return Object.keys(state.likes[type]);
     };
+  },
+  getRec(state) {
+    return payload => state[payload.type][payload.cid];
   }
 };

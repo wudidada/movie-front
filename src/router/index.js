@@ -16,9 +16,7 @@ import MakerList from "../views/MakerList.vue";
 import LabelList from "../views/LabelList.vue";
 import SeriesList from "../views/SeriesList.vue";
 import SearchResult from "../views/SearchResult.vue";
-import MyWatched from "../views/MyWatched.vue";
-import MySubscribed from "../views/MySubscribed.vue";
-import MyOwned from "../views/MyOwned.vue";
+import MyPage from "../views/MyPage.vue";
 import Like from "../views/Like.vue";
 
 Vue.use(VueRouter);
@@ -105,19 +103,9 @@ const routes = [
     component: SearchResult
   },
   {
-    path: "/my/watched",
-    name: "Watched",
-    component: MyWatched
-  },
-  {
-    path: "/my/subscribed",
-    name: "Subscribed",
-    component: MySubscribed
-  },
-  {
-    path: "/my/owned",
-    name: "Owned",
-    component: MyOwned
+    path: "/my/:type",
+    name: "MyPage",
+    component: MyPage
   },
   {
     path: "/likes/:type",

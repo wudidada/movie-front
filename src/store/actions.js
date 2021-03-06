@@ -101,5 +101,8 @@ export default {
     }).catch(err =>
       console.log("update_watched failed:", err.response.body.msg)
     );
+  },
+  importRec({ dispatch }, { type, data }) {
+    dispatch("add" + type[0].toUpperCase() + type.slice(1), data);
   }
 };

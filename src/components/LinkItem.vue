@@ -1,8 +1,6 @@
 <template>
   <div class="link-item">
-    <router-link :to="`/${type}/${item.id}`" target="_blank">{{
-      item.name
-    }}</router-link>
+    <router-link :to="`/${type}/${item.id}`">{{ item.name }}</router-link>
     <div
       v-if="isLiked({ ...item, type: type })"
       class="liked"
