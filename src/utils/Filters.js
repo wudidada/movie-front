@@ -9,8 +9,11 @@ Vue.filter("fDate", date => {
   if (!date) return date;
   let dateString = date;
   if (date instanceof Date) {
-    date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
-    dateString = date.toJSON();
+    const copy_date = new Date(date);
+    copy_date.setMinutes(
+      copy_date.getMinutes() - copy_date.getTimezoneOffset()
+    );
+    dateString = copy_date.toJSON();
   }
   return dateString.slice(0, 10);
 });

@@ -140,13 +140,13 @@
               <td colspan="2" class="watched-message">
                 <div class="watch-date">{{ getWatched(jav).date | fDate }}</div>
                 <el-rate
-                  v-model="rating"
+                  v-model="rate"
                   allow-half
                   show-text
                   @change="updateRate"
                 ></el-rate>
-                <div class="comment" v-if="!isInput">{{ javComment }}</div>
-                <el-input v-else v-model="javComment"></el-input>
+                <div class="comment" v-if="!isInput">{{ comment }}</div>
+                <el-input v-else v-model="comment"></el-input>
 
                 <el-button size="medium" v-if="!isInput" @click="inputComment"
                   >评论</el-button
@@ -176,15 +176,13 @@ export default {
   data() {
     return {
       isInput: false,
-      rating: 0,
-      javComment: "",
+      rate: 0,
+      comment: "",
       checkingMonthly: false
     };
   },
   props: {
-    jav: Object,
-    comment: String,
-    rate: Number
+    jav: Object
   },
   computed: {
     title() {
@@ -202,14 +200,14 @@ export default {
       "delWatched",
       "updateWatched"
     ]),
-    updateRate(rating) {
-      this.updateWatched({ cid: this.jav.cid, rate: rating * 2 });
+    updateRate(rate) {
+      this.updateWatched({ cid: this.jav.cid, rate: rate * 2 });
     },
     inputComment() {
       this.isInput = true;
     },
     updateComment() {
-      this.updateWatched({ cid: this.jav.cid, comment: this.javComment });
+      this.updateWatched({ cid: this.jav.cid, comment: this.comment });
       this.isInput = false;
     },
     checkMonthly() {
@@ -235,11 +233,11 @@ export default {
     }
   },
   watch: {
-    rate(newRate) {
-      this.rating = newRate / 2;
+    "jav.rate": function(rate) {
+      this.rate = rate / 2;
     },
-    comment(newComment) {
-      this.javComment = newComment;
+    "jav.comment": function(comment) {
+      this.comment = comment;
     }
   }
 };

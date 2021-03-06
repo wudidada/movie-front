@@ -2,7 +2,6 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import NewRlease from "../views/NewRlease.vue";
 import NotFound from "../views/NotFound.vue";
-import Video from "../views/Video.vue";
 import Actor from "../views/Actor.vue";
 import Label from "../views/Label.vue";
 import Tag from "../views/Tag.vue";
@@ -34,7 +33,7 @@ const routes = [
   {
     path: "/v/:cid",
     name: "Video",
-    component: Video
+    component: () => import("@/views/Video.vue")
   },
   {
     path: "/actor",

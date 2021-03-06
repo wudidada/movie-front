@@ -1,5 +1,5 @@
 <template>
-  <Article :jav="jav" :comment="comment" :rate="rate" />
+  <Article :jav="jav" />
 </template>
 
 <script>
@@ -10,9 +10,7 @@ import { mapGetters } from "vuex";
 export default {
   data() {
     return {
-      jav: {},
-      comment: "",
-      rate: 0
+      jav: {}
     };
   },
   components: {
@@ -32,17 +30,26 @@ export default {
         .then(res => {
           if (!res.data) this.redirect();
           this.jav = Object.assign({}, this.jav, res.data);
+          return this.jav;
         })
         .then(() => {
-          const watched = this.getWatched(this.jav);
-          if (watched) {
-            this.comment = this.getWatched(this.jav).comment || "";
-            this.rate = this.getWatched(this.jav).rate || 0;
+          const w = this.getWatched(this.jav);
+          if (!w) {
+            return;
+          }
+          if (w.comment) {
+            this.$set(this.jav, "comment", w.comment);
+          }
+          if (w.rate) {
+            this.$set(this.jav, "rate", w.rate);
           }
         })
         .then(() => JavDataService.translate(this.jav.desc))
         .then(result => this.$set(this.jav, "desc", result.data))
-        .catch(() => this.redirect());
+        .catch(err => {
+          console.log(this.jav.cid, err.message);
+          this.redirect();
+        });
     },
     redirect() {
       this.$router.replace("/404");
@@ -50,6 +57,7 @@ export default {
   },
   created() {
     let cid = this.$route.params.cid;
+    console.log("cid", cid);
     this.getData(cid);
   }
 };

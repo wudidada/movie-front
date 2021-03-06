@@ -13,7 +13,6 @@ export default {
   },
 
   initState({ commit, state }, data) {
-    console.log(data);
     commit("initState", data);
     if (state.token) {
       UserDataService.pushState({
