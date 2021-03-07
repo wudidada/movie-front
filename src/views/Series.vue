@@ -30,7 +30,7 @@ export default {
     this.page = this.$route.params["page"]
       ? Number(this.$route.params.page)
       : 1;
-    this.query = { dmm_id: Number(this.$route.params.dmm_id) };
+    this.query = { id: Number(this.$route.params.id) };
   }
 };
 </script>

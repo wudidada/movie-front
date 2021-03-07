@@ -86,7 +86,7 @@ const routes = [
     component: Maker
   },
   {
-    path: "/series/:dmm_id/:page?",
+    path: "/series/:id/:page?",
     name: "Series",
     component: Series
   },

@@ -52,16 +52,12 @@
             <tr v-if="jav['series']">
               <td class="key">系列</td>
               <td class="value">
-                <router-link
-                  :to="`/series/${jav.series.dmm_id}`"
-                  target="_blank"
-                  >{{ jav.series.name }}</router-link
-                >
+                <LinkItem :item="jav.series" type="series" />
               </td>
             </tr>
             <tr>
               <td class="key">评分</td>
-              <td class="value">{{ jav.score }}</td>
+              <td class="value">{{ jav.score | fScore }}</td>
             </tr>
             <tr>
               <td class="key">类别</td>
