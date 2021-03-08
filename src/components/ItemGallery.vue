@@ -16,7 +16,7 @@
         <div class="title">
           <div>{{ item.title }}</div>
         </div>
-        <div class="date">{{ getPubDate(item) }}</div>
+        <div class="date">{{ getPubDate(item) | fDate }}</div>
         <div v-if="item.score" class="score">{{ item.score | fScore }}</div>
       </router-link>
     </div>

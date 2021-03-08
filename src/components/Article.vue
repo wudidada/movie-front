@@ -25,7 +25,9 @@
             </tr>
             <tr>
               <td class="key">发行日期</td>
-              <td class="value">{{ jav.pub_date || jav.release_date }}</td>
+              <td class="value">
+                {{ jav.pub_date || jav.release_date | fDate }}
+              </td>
             </tr>
             <tr>
               <td class="key">长度</td>
