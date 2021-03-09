@@ -44,7 +44,12 @@ export default {
             this.$set(this.jav, "rate", w.rate);
           }
         })
-        .then(() => JavDataService.translate(this.jav.desc))
+        .then(() => {
+          if (!this.jav.desc) {
+            return { data: this.jav.desc };
+          }
+          return JavDataService.translate(this.jav.desc);
+        })
         .then(result => this.$set(this.jav, "desc", result.data))
         .catch(err => {
           console.log(this.jav.cid, err.message);
