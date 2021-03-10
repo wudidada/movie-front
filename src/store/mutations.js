@@ -16,15 +16,16 @@ export default {
     };
     const watched =
       (localStorage.watched && JSON.parse(localStorage.watched)) || {};
-    const owned = (localStorage.owned && JSON.parse(localStorage.owned)) || {};
+    let owned = (localStorage.owned && JSON.parse(localStorage.owned)) || {};
     const subscribed =
       (localStorage.subscribed && JSON.parse(localStorage.subscribed)) || {};
     let name = localStorage.name;
 
     if (data) {
-      merge({ history, likes, watched, owned, subscribed }, data);
+      merge({ history, likes, watched, subscribed }, data);
       name = data.name;
       token = data.token || token;
+      owned = data.owned;
     }
 
     state.token = token;
@@ -86,6 +87,7 @@ export default {
     Vue.delete(state.owned, jav.cid);
   },
   addSubscribed(state, jav) {
+    console.log(jav.cid);
     Vue.set(state.subscribed, jav.cid, { date: new Date() });
   },
   delSubscribed(state, jav) {

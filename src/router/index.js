@@ -2,31 +2,13 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import NewRlease from "../views/NewRlease.vue";
 import NotFound from "../views/NotFound.vue";
-import Actor from "../views/Actor.vue";
-import Label from "../views/Label.vue";
-import Tag from "../views/Tag.vue";
-import Series from "../views/Series.vue";
-import Maker from "../views/Maker.vue";
-import Director from "../views/Director.vue";
-import ActorList from "../views/ActorList.vue";
-import DanyuList from "../views/DanyuList.vue";
-import DirectorList from "../views/DirectorList.vue";
-import MakerList from "../views/MakerList.vue";
-import LabelList from "../views/LabelList.vue";
-import SeriesList from "../views/SeriesList.vue";
-import SearchResult from "../views/SearchResult.vue";
-import Like from "../views/Like.vue";
 
 Vue.use(VueRouter);
 
 const routes = [
   {
-    path: "/",
-    name: "Home",
-    component: NewRlease
-  },
-  {
     path: "/new_release/:page?",
+    alias: "/",
     name: "New_release",
     component: NewRlease
   },
@@ -38,77 +20,77 @@ const routes = [
   {
     path: "/actor",
     name: "ActorList",
-    component: ActorList
+    component: () => import("@/views/ActorList.vue")
   },
   {
     path: "/danyu",
     name: "DanyuList",
-    component: DanyuList
+    component: () => import("@/views/DanyuList.vue")
   },
   {
     path: "/director",
     name: "DirectorList",
-    component: DirectorList
+    component: () => import("@/views/DirectorList.vue")
   },
   {
     path: "/label",
     name: "LabelList",
-    component: LabelList
+    component: () => import("@/views/LabelList.vue")
   },
   {
     path: "/maker",
     name: "MakerList",
-    component: MakerList
+    component: () => import("@/views/Director.vue")
   },
   {
     path: "/series",
     name: "SeriesList",
-    component: SeriesList
+    component: () => import("@/views/SeriesList.vue")
   },
   {
     path: "/actor/:id/:page?",
     name: "Actor",
-    component: Actor
+    component: () => import("@/views/Actor.vue")
   },
   {
     path: "/director/:id/:page?",
     name: "Director",
-    component: Director
+    component: () => import("@/views/Director.vue")
   },
   {
     path: "/label/:id/:page?",
     name: "Label",
-    component: Label
+    component: () => import("@/views/Label.vue")
   },
   {
     path: "/maker/:id/:page?",
     name: "Maker",
-    component: Maker
+    component: () => import("@/views/Maker.vue")
   },
   {
     path: "/series/:id/:page?",
     name: "Series",
-    component: Series
+    component: () => import("@/views/Series.vue")
   },
   {
     path: "/tag/:dmm_id/:page?",
     name: "Tag",
-    component: Tag
+    component: () => import("@/views/Tag.vue")
   },
   {
     path: "/search",
     name: "Search",
-    component: SearchResult
+    component: () => import("@/views/SearchResult.vue")
   },
   {
     path: "/my/:type",
-    name: "MyPage",
-    component: () => import("@/views/MyPage.vue")
+    name: "MyList",
+    component: () => import("@/views/MyList.vue")
   },
   {
     path: "/likes/:type",
     name: "Like",
-    component: Like
+    component: () => import("@/views/Like.vue")
   },
   {
     path: "*",

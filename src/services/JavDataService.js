@@ -81,8 +81,8 @@ export default {
     return jav.get("/jav/series_info", { params });
   },
 
-  getByCids(params) {
-    return jav.get("/jav/cids", { params });
+  getByCids(data) {
+    return jav.post("/jav/cids", data);
   },
 
   getLikesByIds(ids, type) {

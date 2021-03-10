@@ -62,3 +62,11 @@ Vue.filter("fType", type => {
   };
   return typeMap[type] || type;
 });
+
+Vue.filter("fKeyword", keyword => {
+  const keywordMap = {
+    发布时间: "pub_date",
+    加入时间: "add_date"
+  };
+  return keywordMap[keyword] || keyword;
+});

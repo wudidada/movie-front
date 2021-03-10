@@ -1,5 +1,5 @@
 <template>
-  <div class="my-list">
+  <div :class="`${type}-items`">
     <el-dialog
       :title="'导入' + $options.filters.fType(type)"
       :visible.sync="dialogVisible"
@@ -59,6 +59,27 @@
         circle
         @click="showDialog"
       ></el-button>
+      <template v-slot:sort-bar>
+        <div class="sort-bar flex-container">
+          <span style="font-size:14px">{{ cids.length }}</span>
+          <el-button-group class="buttons">
+            <el-button
+              :class="{ selected: isSelected('加入时间') }"
+              @click="sort('加入时间')"
+              size="small"
+              >加入时间</el-button
+            >
+            <el-button
+              label="发布时间"
+              :class="{ selected: isSelected('发布时间') }"
+              @click="sort('发布时间')"
+              size="small"
+              >发布时间</el-button
+            >
+          </el-button-group>
+          <i :class="orderIcon" />
+        </div>
+      </template>
     </ItemGallery>
   </div>
 </template>
@@ -68,16 +89,21 @@ import ItemGallery from "@/components/ItemGallery.vue";
 import JavDataService from "@/services/JavDataService";
 import { mapActions, mapGetters } from "vuex";
 export default {
-  props: {
-    cids: Array,
-    message: String,
-    type: String
+  metaInfo() {
+    return {
+      title: "我" + this.$options.filters.fType(this.type) + "的"
+    };
   },
   data() {
     return {
-      index: 0,
+      type: "",
+      cids: [],
+      page: 1,
       limit: 50,
       items: [],
+      keyword: "发布时间",
+      sortList: [],
+      order: -1,
       isLoading: false,
       isImporting: false,
       importText: "",
@@ -98,27 +124,70 @@ export default {
     ItemGallery
   },
   computed: {
-    ...mapGetters(["getRec"]),
+    ...mapGetters(["getRec", "getCids", "getItems"]),
     param() {
-      return { cids: this.cids.slice(this.index, this.limit + this.index) };
+      if (this.keyword == "加入时间") {
+        return {
+          cids: this.pageCids,
+          limit: this.limit,
+          keyword: this.$options.filters.fKeyword(this.keyword),
+          order: this.order
+        };
+      }
+      return {
+        cids: this.cids,
+        limit: this.limit,
+        page: this.page,
+        order: this.order
+      };
+    },
+    pageCids() {
+      return this.cids.slice(
+        (this.page - 1) * this.limit,
+        this.page * this.limit
+      );
     },
     icon() {
       return this.isImporting ? "el-icon-loading" : "el-icon-document-add";
+    },
+    orderIcon() {
+      return this.order > 0 ? "el-icon-sort-up" : "el-icon-sort-down";
     },
     failedText() {
       return this.failedIds.join("\n");
     },
     malText() {
       return this.malIds.join("\n");
+    },
+    isEnd() {
+      return this.page * this.limit >= this.cids.length;
     }
-  },
-  metaInfo() {
-    return {
-      title: this.message
-    };
   },
   methods: {
     ...mapActions(["importRec"]),
+    sort(label) {
+      if (label == this.keyword) {
+        this.order = -this.order;
+      } else {
+        this.keyword = label;
+        this.order = -1;
+      }
+      this.page = 1;
+      this.items.splice(0);
+      if (label == "加入时间") {
+        this.sortByAdd();
+      }
+      this.loadData();
+    },
+    sortByAdd() {
+      this.cids.splice(0);
+      const sortable = Object.entries(
+        this.getItems(this.type)
+      ).sort(([, v1], [, v2]) =>
+        this.order > 0 ? v1.date - v2.date : v2.date - v1.date
+      );
+      sortable.forEach(value => this.cids.push(value[0]));
+    },
     showDialog() {
       if (this.isImporting) {
         this.progressVisible = !this.progressVisible;
@@ -179,19 +248,35 @@ export default {
       this.progressVisible = true;
     },
     loadData() {
-      if (this.index < this.cids.length && !this.isLoading) {
-        this.isLoading = true;
-        JavDataService.getByCids(this.param)
-          .then(response => {
-            this.items.push(...response.data);
-            this.index += this.limit;
-            this.isLoading = false;
-          })
-          .catch(() => {
-            console.log("get page failed:", this.$route.fullPath);
-            this.$router.replace("/404");
-          });
+      if (this.isEnd || this.isLoading) {
+        return;
       }
+
+      this.isLoading = true;
+      JavDataService.getByCids(this.param)
+        .then(response => {
+          if (this.keyword == "加入时间") {
+            const cidMap = response.data.reduce((acc, value) => {
+              acc[value.cid] = value;
+              return acc;
+            }, {});
+            for (const cid of this.pageCids) {
+              if (cid in cidMap) {
+                this.items.push(cidMap[cid]);
+              } else {
+                console.log("get cid jav failed:", cid);
+              }
+            }
+          } else {
+            this.items.push(...response.data);
+          }
+          this.page += 1;
+          this.isLoading = false;
+        })
+        .catch(() => {
+          console.log("get page failed:", this.$route.fullPath);
+          this.$router.replace("/404");
+        });
     },
     clearProgress() {
       this.progress = Object.assign(
@@ -206,10 +291,32 @@ export default {
       );
       this.failedIds.splice(0);
       this.malIds.splice(0);
+    },
+    isSelected(label) {
+      return this.keyword == label;
     }
   },
   created() {
+    this.type = this.$route.params.type;
+    this.cids = this.getCids(this.type);
     this.loadData();
   }
 };
 </script>
+
+<style scoped>
+.sort-bar {
+  width: 100%;
+  align-items: center;
+}
+
+.sort-bar .selected {
+  background-color: #409eff;
+  color: white;
+}
+
+.buttons {
+  margin-left: 8px;
+  margin-right: 4px;
+}
+</style>

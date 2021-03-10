@@ -36,5 +36,8 @@ export default {
   },
   getRec(state) {
     return payload => state[payload.type][payload.cid];
+  },
+  getItems(state) {
+    return type => state[type];
   }
 };
