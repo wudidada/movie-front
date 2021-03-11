@@ -1,6 +1,21 @@
 <template>
   <div class="item-list">
-    <ItemGallery :items="items" @scrollReachBottom="loadData" />
+    <ItemGallery :items="items" @scrollReachBottom="loadData">
+      <template v-slot:sort-bar>
+        <div class="flex-container filter-bar">
+          <el-checkbox-group
+            class="filter"
+            v-model="filter"
+            :min="0"
+            :max="1"
+            @change="reloadData"
+          >
+            <el-checkbox label="mono">单体</el-checkbox>
+            <el-checkbox label="nocollection">不看合集</el-checkbox>
+          </el-checkbox-group>
+        </div>
+      </template>
+    </ItemGallery>
   </div>
 </template>
 
@@ -20,7 +35,8 @@ export default {
       info: {},
       end: false,
       limit: 50,
-      isLoading: false
+      isLoading: false,
+      filter: []
     };
   },
   components: {
@@ -28,7 +44,15 @@ export default {
   },
   computed: {
     param() {
-      return { page: this.currentPage, limit: this.limit, ...this.query };
+      let param = {
+        page: this.currentPage,
+        limit: this.limit,
+        ...this.query
+      };
+      if (this.filter.length > 0) {
+        param.filter = this.filter[0];
+      }
+      return param;
     }
   },
   metaInfo() {
@@ -37,6 +61,11 @@ export default {
     };
   },
   methods: {
+    reloadData() {
+      this.currentPage = 1;
+      this.items.splice(0);
+      this.loadData();
+    },
     loadData() {
       if (!this.end && !this.isLoading) {
         this.isLoading = true;
@@ -74,3 +103,10 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.filter-bar {
+  width: 100%;
+  margin-bottom: 10px;
+}
+</style>
