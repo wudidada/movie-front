@@ -260,7 +260,7 @@ export default {
   width: 80%;
 }
 
-.cover img {
+#cover img {
   min-width: 800px;
   min-height: 540px;
 }
