@@ -3,6 +3,9 @@
     <ItemGallery :items="items" @scrollReachBottom="loadData">
       <template v-slot:sort-bar>
         <div class="flex-container filter-bar">
+          <span style="font-size:14px; margin-right:40px">{{
+            items.length
+          }}</span>
           <el-checkbox-group
             class="filter"
             v-model="filter"
@@ -108,5 +111,6 @@ export default {
 .filter-bar {
   width: 100%;
   margin-bottom: 10px;
+  align-items: center;
 }
 </style>
