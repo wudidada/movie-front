@@ -59,7 +59,16 @@
             </tr>
             <tr>
               <td class="key">评分</td>
-              <td class="value">{{ jav.score | fScore }}</td>
+              <td class="value">
+                {{ jav.score | fScore }}
+                <a
+                  :href="
+                    `http://www.javlibrary.com/cn/vl_searchbyid.php?keyword=${jav.dvd_id}`
+                  "
+                  target="_blank"
+                  ><img src="http://www.javlibrary.com/favicon.ico"
+                /></a>
+              </td>
             </tr>
             <tr>
               <td class="key">类别</td>
@@ -251,7 +260,7 @@ export default {
   width: 80%;
 }
 
-img {
+.cover img {
   min-width: 800px;
   min-height: 540px;
 }
@@ -262,6 +271,12 @@ img {
   flex-grow: 1;
   width: 30%;
   padding: 0.75rem;
+}
+
+#detail img {
+  width: 16px;
+  height: 16px;
+  vertical-align: baseline;
 }
 
 .monthly {
