@@ -61,7 +61,7 @@
       ></el-button>
       <template v-slot:sort-bar>
         <div class="sort-bar flex-container">
-          <span style="font-size:14px">{{ cids.length }}</span>
+          <span style="font-size:14px">{{ count }}</span>
           <el-button-group class="buttons">
             <el-button
               :class="{ selected: isSelected('加入时间') }"
@@ -78,6 +78,23 @@
             >
           </el-button-group>
           <i :class="orderIcon" />
+          <el-select
+            v-model="filter"
+            clearable
+            placeholder="请选择"
+            size="small"
+            style="margin-left: 20px; width: 7em"
+            @change="filt"
+            @clear="clearFilter"
+          >
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
         </div>
       </template>
     </ItemGallery>
@@ -97,6 +114,7 @@ export default {
   data() {
     return {
       type: "",
+      types: ["owned", "subscribed", "watched"],
       cids: [],
       page: 1,
       limit: 50,
@@ -117,7 +135,9 @@ export default {
         dup: 0
       },
       malIds: [],
-      failedIds: []
+      failedIds: [],
+      filter: "",
+      count: ""
     };
   },
   components: {
@@ -125,6 +145,20 @@ export default {
   },
   computed: {
     ...mapGetters(["getRec", "getCids", "getItems"]),
+    options() {
+      const options = [];
+      for (const type of this.types.filter(a => a != this.type)) {
+        options.push({
+          value: type,
+          label: "只看" + this.$options.filters.fType(type)
+        });
+        options.push({
+          value: "no" + type,
+          label: "不看" + this.$options.filters.fType(type)
+        });
+      }
+      return options;
+    },
     param() {
       if (this.keyword == "加入时间") {
         return {
@@ -160,15 +194,48 @@ export default {
       return this.malIds.join("\n");
     },
     isEnd() {
-      return this.page * this.limit >= this.cids.length;
+      return (this.page - 1) * this.limit >= this.cids.length;
     }
   },
   methods: {
     ...mapActions(["importRec"]),
+    filt() {
+      this.cids = this.getCids([this.type]);
+      const total = this.cids.length;
+      this.sortCids();
+      const cids = this.cids.slice();
+      this.cids.splice(0);
+      if (this.filter.startsWith("no")) {
+        const exclude = new Set(this.getCids(this.filter.slice(2)));
+        for (const cid of cids) {
+          if (!exclude.has(cid)) {
+            this.cids.push(cid);
+          }
+        }
+      } else {
+        const include = new Set(this.getCids(this.filter));
+        for (const cid of cids) {
+          if (include.has(cid)) {
+            this.cids.push(cid);
+          }
+        }
+      }
+      this.count = `${this.cids.length}/${total}`;
+      this.loadData();
+    },
+    clearFilter() {
+      this.cids = this.getCids([this.type]);
+      this.sort();
+    },
     sort(label) {
+      this.count = this.cids.length;
+      this.sortCids(label);
+      this.loadData();
+    },
+    sortCids(label) {
       if (label == this.keyword) {
         this.order = -this.order;
-      } else {
+      } else if (label) {
         this.keyword = label;
         this.order = -1;
       }
@@ -177,16 +244,20 @@ export default {
       if (label == "加入时间") {
         this.sortByAdd();
       }
-      this.loadData();
     },
     sortByAdd() {
+      const cids = new Set(this.cids);
       this.cids.splice(0);
       const sortable = Object.entries(
         this.getItems(this.type)
       ).sort(([, v1], [, v2]) =>
         this.order > 0 ? v1.date - v2.date : v2.date - v1.date
       );
-      sortable.forEach(value => this.cids.push(value[0]));
+      sortable.forEach(value => {
+        if (cids.has(value[0])) {
+          this.cids.push(value[0]);
+        }
+      });
     },
     showDialog() {
       if (this.isImporting) {
@@ -299,7 +370,7 @@ export default {
   created() {
     this.type = this.$route.params.type;
     this.cids = this.getCids(this.type);
-    this.loadData();
+    this.sort();
   }
 };
 </script>
@@ -308,6 +379,7 @@ export default {
 .sort-bar {
   width: 100%;
   align-items: center;
+  margin-bottom: 10px;
 }
 
 .sort-bar .selected {

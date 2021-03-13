@@ -18,7 +18,7 @@ export default {
   },
   metaInfo() {
     return {
-      title: `${this?.jav?.dvd_id} ${this?.jav?.title}`
+      title: `${this.jav.dvd_id} ${this.jav.title}`
     };
   },
   computed: {
