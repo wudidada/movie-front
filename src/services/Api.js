@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const base = "http://192.168.1.106:8888";
+const base = "http://192.168.1.106:8889";
 
 const jav = axios.create({
   baseURL: base + "/api",

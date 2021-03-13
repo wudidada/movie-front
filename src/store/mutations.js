@@ -1,36 +1,19 @@
 import Vue from "vue";
-import { merge } from "lodash";
 import { createDefault } from "./state";
 export default {
   initState(state, data) {
-    let token = localStorage.token;
     const history =
       (localStorage.history && JSON.parse(localStorage.history)) || [];
-    const likes = (localStorage.likes && JSON.parse(localStorage.likes)) || {
-      actor: {},
-      director: {},
-      label: {},
-      maker: {},
-      tag: {},
-      series: {}
-    };
-    const watched =
-      (localStorage.watched && JSON.parse(localStorage.watched)) || {};
-    let owned = (localStorage.owned && JSON.parse(localStorage.owned)) || {};
-    const subscribed =
-      (localStorage.subscribed && JSON.parse(localStorage.subscribed)) || {};
-    let name = localStorage.name;
 
-    if (data) {
-      merge({ history, likes, watched, subscribed }, data);
-      name = data.name;
-      token = data.token || token;
-      owned = data.owned;
+    if (!data) {
+      data = createDefault();
     }
+    const token = data.token || localStorage.token;
+    const { owned, likes, watched, subscribed } = data;
 
     state.token = token;
     state.history.push(...history);
-    state.name = name;
+    state.name = data.name;
 
     for (const [key, value] of Object.entries(likes)) {
       Vue.set(state.likes, key, value);

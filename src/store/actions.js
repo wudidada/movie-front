@@ -12,18 +12,8 @@ export default {
     }
   },
 
-  initState({ commit, state }, data) {
+  initState({ commit }, data) {
     commit("initState", data);
-    if (state.token) {
-      UserDataService.pushState({
-        likes: state.likes,
-        watched: state.watched,
-        subscribed: state.subscribed,
-        owned: state.owned
-      })
-        .then(response => console.log(response.data.msg))
-        .catch(err => console.log(err.response.data.msg));
-    }
   },
   delLiked({ commit }, item) {
     commit("delLiked", item);
