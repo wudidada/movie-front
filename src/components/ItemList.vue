@@ -66,6 +66,7 @@ export default {
   methods: {
     reloadData() {
       this.currentPage = 1;
+      this.end = false;
       this.items.splice(0);
       this.loadData();
     },

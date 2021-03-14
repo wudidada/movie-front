@@ -94,7 +94,7 @@ export default {
     window.addEventListener("scroll", this.onScroll);
   },
   destroyed() {
-    window.removeEventListener("scroll", this.handleScroll);
+    window.removeEventListener("scroll", this.onScroll);
   }
 };
 </script>
