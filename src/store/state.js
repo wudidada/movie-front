@@ -6,6 +6,7 @@ export function createDefault() {
     likes: { actor: {}, label: {}, maker: {}, director: {} },
     watched: {},
     owned: {},
-    subscribed: {}
+    subscribed: {},
+    search: []
   };
 }

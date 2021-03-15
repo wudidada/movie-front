@@ -291,6 +291,14 @@ ul li {
   cursor: pointer;
 }
 
+.collect-search {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  color: red;
+  margin-right: 10px;
+}
+
 .brief {
   justify-content: space-between;
 }
@@ -302,6 +310,11 @@ ul li {
 }
 
 .drop.history .history-list li {
+  padding: 8px;
+  padding-left: 0;
+}
+
+.drop.history .search-list li {
   padding: 8px;
   padding-left: 0;
 }

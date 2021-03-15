@@ -99,8 +99,24 @@
             <div v-if="selected.length > 0">
               <li class="brief">
                 <span>已选</span>
-                <div class="clear" @click="clear">
-                  <TrashLogo />
+                <div class="flex-container">
+                  <div
+                    v-if="isLikedSearch"
+                    class="collect-search"
+                    @click="delSearch(selected)"
+                  >
+                    <SolidHeart />
+                  </div>
+                  <div
+                    v-else
+                    class="collect-search"
+                    @click="addSearch(selected)"
+                  >
+                    <RegularHeart />
+                  </div>
+                  <div class="clear" @click="clear">
+                    <TrashLogo />
+                  </div>
                 </div>
               </li>
               <div class="split"></div>
@@ -164,6 +180,29 @@
               </ul>
             </li>
           </ul>
+          <ul>
+            <div v-if="search.length > 0">
+              <li class="brief">
+                <span>收藏</span>
+              </li>
+              <div class="split"></div>
+            </div>
+            <li
+              v-for="(searchItem, index) in search"
+              :key="index"
+              @click.stop="selectSearch(searchItem)"
+            >
+              <ul class="search-list">
+                <li v-for="item in searchItem" :key="item.type + item.id">
+                  <div class="type">
+                    <strong>{{ item.type | fType }}</strong>
+                  </div>
+                  <div class="name">{{ item.name }}</div>
+                  <div class="id">{{ item.id }}</div>
+                </li>
+              </ul>
+            </li>
+          </ul>
         </div>
       </div>
     </form>
@@ -172,10 +211,13 @@
 
 <script>
 import SearchLogo from "@/assets/search.svg";
+import SolidHeart from "@/assets/heart-solid.svg";
+import RegularHeart from "@/assets/heart-regular.svg";
 import ElasticSearch from "@/services/ElasticSearch";
 import TrashLogo from "@/assets/trash.svg";
 import { mapActions, mapMutations, mapState } from "vuex";
 import UserDataService from "../services/UserDataService";
+import { isEqual } from "lodash";
 
 export default {
   data() {
@@ -199,12 +241,22 @@ export default {
   },
   components: {
     SearchLogo,
-    TrashLogo
+    TrashLogo,
+    SolidHeart,
+    RegularHeart
   },
   props: {
     buttons: Array
   },
   computed: {
+    isLikedSearch() {
+      for (const s of this.search) {
+        if (isEqual(s, this.selected)) {
+          return true;
+        }
+      }
+      return false;
+    },
     droped() {
       return (
         this.visible &&
@@ -218,10 +270,17 @@ export default {
         this.visible && this.selected.length == 0 && this.suggest.length == 0
       );
     },
-    ...mapState(["history", "token", "name", "likes"])
+    ...mapState(["history", "token", "name", "likes", "search"])
   },
   methods: {
-    ...mapMutations(["clearHistory", "saveHistory", "updateToken", "logout"]),
+    ...mapMutations([
+      "clearHistory",
+      "saveHistory",
+      "updateToken",
+      "logout",
+      "addSearch",
+      "delSearch"
+    ]),
     ...mapActions(["initState"]),
     isActive(button) {
       if (this.$route.path === button.url) {
@@ -326,6 +385,13 @@ export default {
       this.history.splice(this.history.indexOf(currentHistory), 1);
       this.history.unshift(currentHistory);
       this.selected.push(...currentHistory);
+      if (this.selected[0].type == "keyword") {
+        this.text = this.selected[0].name;
+        this.selected.pop();
+      }
+    },
+    selectSearch(currentSearch) {
+      this.selected.push(...currentSearch);
       if (this.selected[0].type == "keyword") {
         this.text = this.selected[0].name;
         this.selected.pop();

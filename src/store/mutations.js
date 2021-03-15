@@ -1,9 +1,12 @@
 import Vue from "vue";
 import { createDefault } from "./state";
+import _ from "lodash";
 export default {
   initState(state, data) {
     const history =
       (localStorage.history && JSON.parse(localStorage.history)) || [];
+    const search =
+      (localStorage.search && JSON.parse(localStorage.search)) || [];
 
     if (!data) {
       data = createDefault();
@@ -14,6 +17,7 @@ export default {
     state.token = token;
     state.history.push(...history);
     state.name = data.name;
+    state.search.push(...search);
 
     for (const [key, value] of Object.entries(likes)) {
       Vue.set(state.likes, key, value);
@@ -49,6 +53,20 @@ export default {
   },
   saveHistory(state) {
     localStorage.history = JSON.stringify(state.history);
+  },
+  addSearch(state, search) {
+    state.search.push(_.clone(search));
+    console.log(state.search);
+    localStorage.search = JSON.stringify(state.search);
+  },
+  delSearch(state, search) {
+    for (const [i, s] of state.search.entries()) {
+      if (_.isEqual(s, search)) {
+        state.search.splice(i, 1);
+        break;
+      }
+    }
+    localStorage.search = JSON.stringify(state.search);
   },
   delLiked(state, item) {
     Vue.delete(state.likes[item.type], item.id);
