@@ -286,7 +286,12 @@ export default {
     },
     submit() {
       let query;
-      if (this.selected.length > 0) {
+      if (this.text.length > 0) {
+        query = { keyword: this.text };
+        if (this.history.length == 0 || this.text != this.history[0][0].name) {
+          this.changeHistory = true;
+        }
+      } else if (this.selected.length > 0) {
         query = this.selected.reduce((acc, ele) => {
           if (!acc[ele.type]) {
             acc[ele.type] = ele.id;
@@ -299,12 +304,8 @@ export default {
           }
           return acc;
         }, {});
-      } else if (this.text.length > 0) {
-        query = { keyword: this.text };
-        if (this.history.length == 0 || this.text != this.history[0][0].name) {
-          this.changeHistory = true;
-        }
       }
+
       if (this.changeHistory) {
         this.saveSearchHistory();
         this.changeHistory = false;

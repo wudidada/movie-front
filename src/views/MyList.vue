@@ -228,7 +228,9 @@ export default {
       this.sort();
     },
     sort(label) {
-      this.count = this.cids.length;
+      if (!this.filter) {
+        this.count = this.cids.length;
+      }
       this.sortCids(label);
       this.loadData();
     },
