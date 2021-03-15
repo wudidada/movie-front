@@ -40,7 +40,7 @@ const routes = [
   {
     path: "/maker",
     name: "MakerList",
-    component: () => import("@/views/Director.vue")
+    component: () => import("@/views/MakerList.vue")
   },
   {
     path: "/series",
