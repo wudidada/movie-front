@@ -62,11 +62,18 @@
               <td class="value">
                 {{ jav.score | fScore }}
                 <a
+                  class="out-link"
                   :href="
                     `http://www.javlibrary.com/cn/vl_searchbyid.php?keyword=${jav.dvd_id}`
                   "
                   target="_blank"
                   ><img src="http://www.javlibrary.com/favicon.ico"
+                /></a>
+                <a
+                  class="out-link"
+                  :href="`https://javdb.com/search?q=${jav.dvd_id}&f=all`"
+                  target="_blank"
+                  ><img src="https://javdb.com/favicon-16x16.png"
                 /></a>
               </td>
             </tr>
@@ -346,5 +353,9 @@ export default {
 
 .watched-message div {
   margin: 8px 0;
+}
+
+.value .out-link {
+  padding-right: 4px;
 }
 </style>

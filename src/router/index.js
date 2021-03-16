@@ -93,6 +93,11 @@ const routes = [
     component: () => import("@/views/Like.vue")
   },
   {
+    path: "/rank/most_wanted/latest",
+    name: "MostWanted",
+    component: () => import("@/views/MostWanted.vue")
+  },
+  {
     path: "*",
     name: "Not Found",
     component: NotFound

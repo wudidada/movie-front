@@ -100,5 +100,9 @@ export default {
 
   getCid(dvd_id) {
     return jav.get("/jav/dvd_to_cid", { params: { dvd_id } });
+  },
+
+  getLatestMostWanted(params) {
+    return jav.get("/jav/most_wanted/latest", { params });
   }
 };

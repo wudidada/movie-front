@@ -37,7 +37,7 @@ export default {
       { name: "制作商", url: "/maker" },
       // { name: "标签", url: "/tag" },
       { name: "系列", url: "/series" },
-      { name: "排行榜", url: "/rank" }
+      { name: "排行榜", url: "/rank/most_wanted/latest" }
     ]
   }),
   metaInfo: {
