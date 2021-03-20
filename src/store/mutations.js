@@ -12,7 +12,7 @@ export default {
       data = createDefault();
     }
     const token = data.token || localStorage.token;
-    const { owned, likes, watched, subscribed } = data;
+    const { owned, likes, watched, subscribed, comments } = data;
 
     state.token = token;
     state.history.push(...history);
@@ -21,6 +21,10 @@ export default {
 
     for (const [key, value] of Object.entries(likes)) {
       Vue.set(state.likes, key, value);
+    }
+
+    for (const [key, value] of Object.entries(comments)) {
+      Vue.set(state.comments, key, value);
     }
 
     for (const [key, value] of Object.entries(watched)) {
@@ -80,6 +84,16 @@ export default {
   },
   saveLiked(state) {
     localStorage.likes = JSON.stringify(state.likes);
+  },
+  updateComment(state, item) {
+    console.log(item);
+    Vue.set(state.comments[item.type], item.id, {
+      rate: item.rate,
+      comment: item.comment
+    });
+  },
+  saveComments(state) {
+    localStorage.comments = JSON.stringify(state.comments);
   },
   addOwned(state, jav) {
     Vue.set(state.owned, jav.cid, { date: new Date() });

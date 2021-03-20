@@ -97,6 +97,7 @@
                   :key="actor.id"
                   :item="actor"
                   type="actor"
+                  :title="actorComment(actor.id)"
                 />
               </td>
             </tr>
@@ -202,7 +203,13 @@ export default {
     title() {
       return `${this.jav.dvd_id} ${this.jav.title}`;
     },
-    ...mapGetters(["isOwned", "isSubscribed", "isWatched", "getWatched"])
+    ...mapGetters([
+      "isOwned",
+      "isSubscribed",
+      "isWatched",
+      "getWatched",
+      "getComment"
+    ])
   },
   methods: {
     ...mapActions([
@@ -244,6 +251,15 @@ export default {
           .catch(() => this.$notify.error({ title: "查询失败" }))
           .finally(() => (this.checkingMonthly = false));
       }
+    },
+    actorComment(id) {
+      const comment = this.getComment({ type: "actor", id });
+      if (comment) {
+        return (
+          this.$options.filters.fRate(comment.rate) + " " + comment.comment
+        );
+      }
+      return "";
     }
   },
   watch: {

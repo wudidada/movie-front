@@ -5,6 +5,7 @@
       :getInfo="getInfo"
       :query="query"
       :page="page"
+      type="actor"
     />
   </div>
 </template>

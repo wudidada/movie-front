@@ -39,5 +39,8 @@ export default {
   },
   getItems(state) {
     return type => state[type];
+  },
+  getComment(state) {
+    return payload => state.comments[payload.type][payload.id];
   }
 };

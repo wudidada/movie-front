@@ -47,5 +47,9 @@ export default {
 
   delWatched(data) {
     return user.put("/del_watched", data);
+  },
+
+  addComment(data) {
+    return user.put("/add_comment", data);
   }
 };

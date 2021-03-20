@@ -4,6 +4,7 @@
       <slot></slot>
     </div>
     <div class="items flex-container">
+      <slot name="info-bar"></slot>
       <slot name="sort-bar"></slot>
       <div class="item" v-for="item in items" :key="item.pid">
         <div class="side flex-container">

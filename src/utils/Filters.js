@@ -70,3 +70,11 @@ Vue.filter("fKeyword", keyword => {
   };
   return keywordMap[keyword] || keyword;
 });
+
+Vue.filter("fRate", rate => {
+  if (!rate) {
+    return;
+  }
+
+  return "★".repeat(rate) + "☆".repeat(5 - rate);
+});

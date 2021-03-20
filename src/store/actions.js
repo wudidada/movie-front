@@ -11,7 +11,6 @@ export default {
       dispatch("initState");
     }
   },
-
   initState({ commit }, data) {
     commit("initState", data);
   },
@@ -31,6 +30,17 @@ export default {
       id: item.id,
       data: state.likes[item.type][item.id]
     }).catch(err => console.log("add_likes failed:", err.response.body.msg));
+  },
+  updateComment({ commit, state }, item) {
+    commit("updateComment", item);
+    commit("saveComments");
+    UserDataService.addComment({
+      type: item.type,
+      id: item.id,
+      data: state.comments[item.type][item.id]
+    }).catch(err =>
+      console.log("update_comment failed:", err.response.body.msg)
+    );
   },
   addOwned({ commit, state }, jav) {
     commit("addOwned", jav);
