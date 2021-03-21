@@ -242,13 +242,14 @@ export default {
 
               this.$notify.success({
                 title,
-                message: data.bitrate + "kbps"
+                message: data.bitrate + "kbps",
+                duration: 0
               });
             } else {
-              this.$notify.warning({ title: "未找到" });
+              this.$notify.warning({ title: "未找到", duration: 0 });
             }
           })
-          .catch(() => this.$notify.error({ title: "查询失败" }))
+          .catch(() => this.$notify.error({ title: "查询失败", duration: 0 }))
           .finally(() => (this.checkingMonthly = false));
       }
     },

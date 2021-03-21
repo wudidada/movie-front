@@ -19,25 +19,25 @@ export default {
     state.name = data.name;
     state.search.push(...search);
 
-    for (const [key, value] of Object.entries(likes)) {
+    for (const [key, value] of Object.entries(likes || {})) {
       Vue.set(state.likes, key, value);
     }
 
-    for (const [key, value] of Object.entries(comments)) {
+    for (const [key, value] of Object.entries(comments || {})) {
       Vue.set(state.comments, key, value);
     }
 
-    for (const [key, value] of Object.entries(watched)) {
+    for (const [key, value] of Object.entries(watched || {})) {
       value.date = new Date(value.date);
       Vue.set(state.watched, key, value);
     }
 
-    for (const [key, value] of Object.entries(owned)) {
+    for (const [key, value] of Object.entries(owned || {})) {
       value.date = new Date(value.date);
       Vue.set(state.owned, key, value);
     }
 
-    for (const [key, value] of Object.entries(subscribed)) {
+    for (const [key, value] of Object.entries(subscribed || {})) {
       // 兼容性做法 可去除
       if (typeof value == "string") {
         Vue.set(state.subscribed, key, { date: new Date(value) });
@@ -60,7 +60,6 @@ export default {
   },
   addSearch(state, search) {
     state.search.push(_.clone(search));
-    console.log(state.search);
     localStorage.search = JSON.stringify(state.search);
   },
   delSearch(state, search) {
@@ -86,7 +85,6 @@ export default {
     localStorage.likes = JSON.stringify(state.likes);
   },
   updateComment(state, item) {
-    console.log(item);
     Vue.set(state.comments[item.type], item.id, {
       rate: item.rate,
       comment: item.comment
@@ -102,7 +100,6 @@ export default {
     Vue.delete(state.owned, jav.cid);
   },
   addSubscribed(state, jav) {
-    console.log(jav.cid);
     Vue.set(state.subscribed, jav.cid, { date: new Date() });
   },
   delSubscribed(state, jav) {
