@@ -5,7 +5,7 @@
         <div class="info-bar">
           <div class="info">
             <h2>{{ name }}</h2>
-            <el-rate v-model="rate" @change="update"></el-rate>
+            <el-rate v-model="rate" allow-half @change="update"></el-rate>
             <div class="comment" v-if="!isInput">{{ comment }}</div>
             <div class="comment" v-else>
               <el-input v-model="comment"></el-input>

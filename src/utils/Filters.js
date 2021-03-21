@@ -76,5 +76,12 @@ Vue.filter("fRate", rate => {
     return;
   }
 
-  return "★".repeat(rate) + "☆".repeat(5 - rate);
+  const full_star = Math.floor(rate);
+  const half_star = Math.ceil(rate) - full_star;
+
+  return (
+    "★".repeat(full_star) +
+    "⍟".repeat(half_star) +
+    "☆".repeat(5 - full_star - half_star)
+  );
 });
