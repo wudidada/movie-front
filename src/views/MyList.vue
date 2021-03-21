@@ -243,7 +243,7 @@ export default {
       }
       this.page = 1;
       this.items.splice(0);
-      if (label == "加入时间") {
+      if (this.keyword == "加入时间") {
         this.sortByAdd();
       }
     },
