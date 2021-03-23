@@ -344,7 +344,7 @@ export default {
       this.changeHistory = true;
     },
     isDvdId(line) {
-      return line.match(/^\w+$/);
+      return line.match(/^[\w-]+$/);
     },
     submit() {
       let query;
