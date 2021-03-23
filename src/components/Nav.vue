@@ -343,10 +343,17 @@ export default {
       this.selected.splice(this.selected.indexOf(item), 1);
       this.changeHistory = true;
     },
+    isDvdId(line) {
+      return line.match(/^\w+$/);
+    },
     submit() {
       let query;
       if (this.text.length > 0) {
-        query = { keyword: this.text };
+        if (this.isDvdId(this.text)) {
+          query = { dvd_id: this.text };
+        } else {
+          query = { keyword: this.text };
+        }
         if (this.history.length == 0 || this.text != this.history[0][0].name) {
           this.changeHistory = true;
         }
