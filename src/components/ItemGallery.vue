@@ -3,6 +3,14 @@
     <div class="slot-button">
       <slot></slot>
     </div>
+    <div class="export-button">
+      <el-button
+        type="primary"
+        icon="el-icon-document-copy"
+        circle
+        @click="exportCids"
+      ></el-button>
+    </div>
     <div class="items flex-container">
       <slot name="info-bar"></slot>
       <slot name="sort-bar"></slot>
@@ -143,6 +151,15 @@ export default {
       } else {
         this.slideButton = false;
       }
+    },
+    exportCids() {
+      const cids = [];
+      this.items.forEach(item => cids.push(item.cid));
+      const text = cids.join(",");
+      this.$copyText(text).then(
+        () => this.$message.success("导出cid成功"),
+        () => this.$message.error("导出cid失败")
+      );
     }
   },
   mounted() {

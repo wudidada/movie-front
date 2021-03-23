@@ -42,6 +42,12 @@
   right: 40px;
 }
 
+.export-button {
+  position: fixed;
+  right: 40px;
+  top: 50%;
+}
+
 .id {
   height: 1.5rem;
   line-height: 1.5rem;
