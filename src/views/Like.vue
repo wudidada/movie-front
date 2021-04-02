@@ -22,7 +22,7 @@ export default {
       items: [],
       type: "",
       index: 0,
-      limit: 20,
+      limit: 100,
       isLoading: false
     };
   },
