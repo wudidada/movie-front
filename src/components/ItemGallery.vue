@@ -46,7 +46,9 @@
         </div>
         <router-link :to="`/v/${item.cid}`" :title="item.title">
           <div class="id" :title="getID(item)">{{ getID(item) | fID }}</div>
-          <img class="cover" :src="item.cover | smallPic" />
+          <div class="cover-container">
+            <img class="cover" :src="item.poster || item.cover | smallPic" />
+          </div>
           <div class="title">
             <div>{{ item.title }}</div>
           </div>
@@ -64,13 +66,9 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 export default {
-  props: {
-    items: Array
-  },
+  props: { items: Array },
   data() {
-    return {
-      slideButton: false
-    };
+    return { slideButton: false };
   },
   computed: {
     ...mapGetters(["isSubscribed", "isWatched", "isOwned"])
@@ -120,15 +118,10 @@ export default {
           id += ` ${actor.name}`;
         }
       }
-
       return id;
     },
     slideToTop() {
-      window.scrollTo({
-        left: 0,
-        top: 0,
-        behavior: "smooth"
-      });
+      window.scrollTo({ left: 0, top: 0, behavior: "smooth" });
     },
     onScroll() {
       //变量scrollTop是滚动条滚动时，距离顶部的距离
